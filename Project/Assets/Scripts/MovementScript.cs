@@ -34,6 +34,7 @@ public class MovementScript : MonoBehaviour
 
     void MirarAlCursor()
     {
+        
         Vector3 dis = aim.transform.position - transform.position;
         dis = aim.transform.InverseTransformDirection(dis);
         float angulo = Mathf.Atan2(dis.y, dis.x) * Mathf.Rad2Deg;
