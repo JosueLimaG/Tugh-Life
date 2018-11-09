@@ -7,11 +7,12 @@ public class ScreenColliders : MonoBehaviour
     //Script utilizado para la creacion de los limites del cursor del apuntado dentro de la vision de la camara, sin estos el cursor se saldria de la pantalla
 
     private float grosor = 10f;
-    private Vector2 screenSize;
+    private Vector3 screenSize;
     private Transform top, bot, left, right;
 
     void Start()
     {
+
         //Creacion de 4 GameObjects
         top = new GameObject().transform;
         bot = new GameObject().transform;
@@ -37,25 +38,25 @@ public class ScreenColliders : MonoBehaviour
         right.gameObject.layer = 2;
 
         //Se anade a los GameObjects los componentes BoxCollider2D
-        top.gameObject.AddComponent<BoxCollider2D>();
-        bot.gameObject.AddComponent<BoxCollider2D>();
-        right.gameObject.AddComponent<BoxCollider2D>();
-        left.gameObject.AddComponent<BoxCollider2D>();
+        top.gameObject.AddComponent<BoxCollider>();
+        bot.gameObject.AddComponent<BoxCollider>();
+        right.gameObject.AddComponent<BoxCollider>();
+        left.gameObject.AddComponent<BoxCollider>();
 
         //Se determina el tamano de la pantalla
-        screenSize.x = Vector2.Distance(Camera.main.ScreenToWorldPoint(new Vector2(0, 0)), Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0))) * 0.5f;
-        screenSize.y = Vector2.Distance(Camera.main.ScreenToWorldPoint(new Vector2(0, 0)), Camera.main.ScreenToWorldPoint(new Vector2(0, Screen.height))) * 0.5f;
+        screenSize.x = Vector2.Distance(Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)), Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)));
+        screenSize.z = Vector2.Distance(Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)), Camera.main.ScreenToWorldPoint(new Vector3(0, 0, Screen.height)));
 
         //Se modifica la escala de cada collider para que cubra el area correspondiente de la pantalla
-        right.localScale = new Vector3(grosor, screenSize.y * grosor * 0.5f);
-        left.localScale = new Vector3(grosor, screenSize.y * grosor * 0.5f);
-        top.localScale = new Vector3(screenSize.x * grosor * 0.5f, grosor);
-        bot.localScale = new Vector3(screenSize.x * grosor * 0.5f, grosor);
+        right.localScale = new Vector3(grosor, grosor, screenSize.z);
+        left.localScale = new Vector3(grosor, grosor, screenSize.z);
+        top.localScale = new Vector3(screenSize.x, grosor, grosor);
+        bot.localScale = new Vector3(screenSize.x, grosor, grosor);
 
         //Se posiciona a los GameObjects en los bordes de la pantalla
-        right.position = new Vector3(transform.position.x + screenSize.x + (right.localScale.x * 0.5f), 0, 0);
-        left.position = new Vector3(transform.position.x - screenSize.x - (left.localScale.x * 0.5f), 0, 0);
-        top.position = new Vector3(0, screenSize.y + (top.localScale.y * 0.5f), 0);
-        bot.position = new Vector3(0, -screenSize.y - (bot.localScale.y * 0.5f), 0);
+        right.position = new Vector3(transform.position.x + screenSize.x + (right.localScale.x), 0, 0);
+        left.position = new Vector3(transform.position.x - screenSize.x - (left.localScale.x), 0, 0);
+        top.position = new Vector3(0, 0, screenSize.z + (top.localScale.z));
+        bot.position = new Vector3(0, 0, -screenSize.z - (bot.localScale.z));
     }
 }

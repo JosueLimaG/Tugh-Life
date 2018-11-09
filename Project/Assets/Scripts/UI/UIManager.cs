@@ -7,12 +7,13 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
 
-    public Image _01Arma;
-    public Text _01Info;
-    public Image _02Arma;
-    public Text _02Info;
-    public bool _antibalas;
+    [HideInInspector] public Image _01Arma;
+    [HideInInspector] public Text _01Info;
+    [HideInInspector] public Image _02Arma;
+    [HideInInspector] public Text _02Info;
+    [HideInInspector] public bool _antibalas;
 
+    [Header("Sprites Armas")]
     public Sprite desarmado;
     public Sprite palo;
     public Sprite cuchillo;
@@ -28,7 +29,7 @@ public class UIManager : MonoBehaviour
     private int[] municionGuardada = new int[2];
     private Inventario jugador;
 
-    void Start()
+    void Awake()
     {
         if (instance == null)
         {
@@ -40,6 +41,11 @@ public class UIManager : MonoBehaviour
         }
 
         jugador = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<Inventario>();
+    }
+
+    private void Start()
+    {
+        ActualizarInfomacion();
     }
 
     public void ActualizarInventario(string[] items)
@@ -76,8 +82,6 @@ public class UIManager : MonoBehaviour
 
         _01Arma.sprite = inventarioJugador[1];
         _02Arma.sprite = inventarioJugador[0];
-
-        Debug.Log(items);
     }
 
     public void ActualizarInfomacion()
@@ -102,8 +106,8 @@ public class UIManager : MonoBehaviour
             _02Arma.color = new Color(_02Arma.color.r, _02Arma.color.g, _02Arma.color.b, 0.25f);
         }
 
-        _01Info.text = municionActual[0].ToString() + "/" + municionMaxima[0].ToString() + "  -  " + municionGuardada[0].ToString();
-        _02Info.text = municionActual[1].ToString() + "/" + municionMaxima[1].ToString() + "  -  " + municionGuardada[1].ToString();
+        _02Info.text = municionActual[0].ToString() + "/" + municionMaxima[0].ToString() + "  -  " + municionGuardada[0].ToString();
+        _01Info.text = municionActual[1].ToString() + "/" + municionMaxima[1].ToString() + "  -  " + municionGuardada[1].ToString();
     }
 }
 

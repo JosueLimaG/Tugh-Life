@@ -5,10 +5,11 @@ using UnityEngine;
 public class Metralleta : Armas
 {
     //Variables publicas que reemplazan las variables de la clase Armas
+    [Header("Atributos del arma")]
     public string nombre = "Metralleta";
     public int maxAmmo = 32;
     public float tiempoRecarga = 5f;
-    public float cadenciaDeTiro = 0.2f;
+    public float cadenciaDeTiro = 0.1f;
     public float precision = 90f;
     public float retroceso = 75f;
     public float alcance = 120f;
@@ -78,16 +79,6 @@ public class Metralleta : Armas
             //Debug.Log(hit.collider.name);
         }
     }
-
-    //Metodo usado para descartar el arma actual, se lo quita de la jerarquia del jugador.
-    public override void Descartar()
-    {
-        {
-            gameObject.transform.parent = null;
-            activo = false;
-        }
-    }
-
 
     //Metodo publico usado para cambiar el valor de la municion actual, si el bool recarga es true se llena el cargador restando la municion del total almacenado.
     public override void VarAmmo(bool recarga, int x)

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Desarmado : Armas
 {
+    [Header("Atributos del arma")]
     public string nombre = "Desarmado";
     public float cadenciaDeTiro = 0.25f;
     public float precision = 90f;
@@ -61,11 +62,6 @@ public class Desarmado : Armas
     public override void Disparo()
     {
         Debug.Log("Disparo de " + Nombre());
-    }
-
-    public override void Descartar()
-    {
-        Destroy(gameObject);
     }
 
     public override void VarAmmo(bool recarga, int x)

@@ -14,6 +14,7 @@ public class Inventario : MonoBehaviour
     private Armas arma1;
     private Armas arma2;
 
+    [Header("Municion disponible")]
     public int balasPistola;
     public int balasEscopeta;
     public int balasMetralleta;
@@ -109,6 +110,8 @@ public class Inventario : MonoBehaviour
 
         Armas arma1 = contenido[0].GetComponent<Armas>();
         Armas arma2 = contenido[1].GetComponent<Armas>();
+
+        UIManager.instance.ActualizarInfomacion();
     }
 
     public string[] ConsultarInventario()

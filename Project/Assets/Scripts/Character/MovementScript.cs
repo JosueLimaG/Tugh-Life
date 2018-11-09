@@ -9,14 +9,14 @@ public class MovementScript : MonoBehaviour
     [HideInInspector] public float angulo;
     [HideInInspector] public  Transform aim;
 
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     private Inventario inventario;
     private GameObject armaCerca;
 
     void Start ()
     {
         Cursor.visible = false;
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
         aim = GameObject.Find("Aim").transform;
         inventario = transform.GetChild(0).GetComponent<Inventario>(); //Se obtiene el componente Inventario del jugador para ejecutar ciertos movimientos basicos.
         MostrarInvetario();
@@ -45,27 +45,33 @@ public class MovementScript : MonoBehaviour
     void MostrarInvetario()
     {
         UIManager.instance.ActualizarInventario(inventario.ConsultarInventario());
+        UIManager.instance.ActualizarInfomacion();
     }
 
     void ActualizarInventario(int id)
     {
-        Debug.Log(inventario.InfoInventario());
+        //Debug.Log(inventario.InfoInventario());
         //UIManager.instance.ActualizarInfomacion(inventario.InfoInventario());
     }
 
     void MovimientoPersonaje()
     {
         float inputX = Input.GetAxisRaw("Horizontal");
-        float inputY = Input.GetAxisRaw("Vertical");
+        float inputZ = Input.GetAxisRaw("Vertical");
 
-        rb.velocity = new Vector3(inputX, inputY, 0f) * velocidad;
+        rb.velocity = new Vector3(inputX, 0, inputZ) * velocidad;
     }
 
     void MirarAlCursor()
-    {
+    {/*
         Vector3 dis = aim.transform.position - transform.position;
         dis = aim.transform.InverseTransformDirection(dis);
-        angulo = Mathf.Atan2(dis.y, dis.x) * Mathf.Rad2Deg;
-        transform.eulerAngles = new Vector3(0, 0, angulo);
+        angulo = Mathf.Atan(dis.z / dis.x) * Mathf.Rad2Deg;
+        //angulo = Mathf.Atan2(dis.z, dis.x) * Mathf.Rad2Deg;
+        Debug.Log(angulo);
+        transform.eulerAngles = new Vector3(90, 0, angulo);
+        */
+        transform.LookAt(aim);
+        transform.eulerAngles = new Vector3(90, transform.eulerAngles.y, transform.eulerAngles.z + 90);
     }
 }

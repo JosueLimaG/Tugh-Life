@@ -5,6 +5,7 @@ using UnityEngine;
 public class Escopeta : Armas
 {
     //Variables publicas que reemplazan las variables de la clase Armas
+    [Header("Atributos del arma")]
     public string nombre = "Escopeta";
     public int maxAmmo = 2;
     public float tiempoRecarga = 8f;
@@ -64,7 +65,7 @@ public class Escopeta : Armas
     public override void Disparo()
     {
         VarAmmo(false, -1);
-        disparoSystem.Emit(4);
+        disparoSystem.Emit(8);
         Debug.Log("Disparo de " + Nombre());
     }
 
@@ -78,16 +79,6 @@ public class Escopeta : Armas
             //Debug.Log(hit.collider.name);
         }
     }
-
-    //Metodo usado para descartar el arma actual, se lo quita de la jerarquia del jugador.
-    public override void Descartar()
-    {
-        {
-            gameObject.transform.parent = null;
-            activo = false;
-        }
-    }
-
 
     //Metodo publico usado para cambiar el valor de la municion actual, si el bool recarga es true se llena el cargador restando la municion del total almacenado.
     public override void VarAmmo(bool recarga, int x)

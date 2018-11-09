@@ -4,48 +4,65 @@ using UnityEngine;
 
 public class AnimScript : MonoBehaviour
 {
+    private Animator pies;
     private Animator anim;
-    private Rigidbody2D rb;
-    private Vector2 dir;
-    private MovementScript movement;
-    private float ang;
-    private bool mov;
-    private Transform aim;
+    private Rigidbody rb;
+    private Inventario inventario;
+
+    public bool recargando;
+    public bool disparo;
 
 	void Start ()
     {
+        pies = transform.GetChild(1).GetComponent<Animator>();
         anim = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
-        if (gameObject.tag == "Player")
-            movement = GetComponent<MovementScript>();
+        rb = GetComponent<Rigidbody>();
+        inventario = transform.GetChild(0).GetComponent<Inventario>();
 	}
 	
 	void Update ()
     {
-        dir = transform.InverseTransformDirection(rb.velocity);
-        dir = rb.velocity;
-        ang = Mathf.Atan(rb.velocity.y / rb.velocity.x) * Mathf.Rad2Deg;
-
-        if (rb.velocity.x < 0)
-            ang += 180;
-        if (rb.velocity.x >= 0 && rb.velocity.y < 0)
-            ang += 360;
-
-        ang += movement.angulo;
-
-        if (ang < 0)
-            ang += 360;
-        if (ang > 360)
-            ang -= 306;
-
-        if (dir.x != 0 || dir.y != 0)
+        if (rb.velocity.x != 0 || rb.velocity.z != 0)
         {
-            anim.SetBool("Movimiento", true);
-            anim.SetFloat("Angulo", ang);
+            pies.SetBool("Movimiento", true);
         }
         else
         {
-            anim.SetBool("Movimiento", false);
+            pies.SetBool("Movimiento", false);
         }
+
+        switch(inventario.activa.GetComponent<Armas>().name)
+        {
+            case "Desarmado":
+                anim.SetInteger("Arma", 0);
+                break;
+            case "Palo":
+                anim.SetInteger("Arma", 1);
+                break;
+            case "Cuchillo":
+                anim.SetInteger("Arma", 2);
+                break;
+            case "Pistola":
+                anim.SetInteger("Arma", 3);
+                break;
+            case "Escopeta":
+                anim.SetInteger("Arma", 4);
+                break;
+            case "Metralleta":
+                anim.SetInteger("Arma", 5);
+                break;
+        }
+
+        //anim.SetBool("Recarga", recargando);
+        //anim.SetBool("Disparo", disparo);
+
+        Vector2 position = transform.position;
+        Vector2 velocidad = rb.velocity;
+        pies.transform.eulerAngles = new Vector3(0, 0, Vector2.Angle(position, velocidad));
 	}
+
+    public void Cargando(bool x)
+    {
+        anim.SetBool("Recarga", x);
+    }
 }

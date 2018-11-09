@@ -9,17 +9,50 @@ public class CameraScript : MonoBehaviour
 
     private Transform aim;
     private Transform player;
-    public float altura = 10;
-    public float distancia = 3;
+    private float dampX = 0.2f;
+    private float dampZ = 0.2f;
+    private float tiempo;
+    private float altura = 10;
+    private float velocityX = 0f;
+    private float velocityZ = 0f;
 
-	void Start ()
+
+    void Start()
     {
         aim = GameObject.Find("Aim").transform;
         player = GameObject.FindGameObjectWithTag("Player").transform;
-	}
-	
-	void Update ()
+    }
+
+    /*void Update ()
     {
-        transform.position = new Vector3((aim.position.x + player.position.x) / distancia, ( aim.position.y + player.position.y) / distancia, -altura);
-	}
+        Vector3 aimTemp = (aim.position - player.position) / 2;
+        aimTemp += new Vector3(0, altura, 0);
+        transform.position = player.position + aimTemp;
+	}*/
+
+    private void FixedUpdate()
+    {
+        Vector3 aimDir = (aim.position - player.position).normalized * 4; //*0.8f
+
+        Vector3 targetOffset = player.position + player.forward; //*0.5f
+
+        float posX = Mathf.SmoothDamp(transform.position.x, targetOffset.x + aimDir.x, ref velocityX, dampX);
+        float posZ = Mathf.SmoothDamp(transform.position.z, targetOffset.z + aimDir.z, ref velocityZ, dampZ);
+
+        transform.position = new Vector3(posX, altura, posZ);
+
+        bool apuntar = Input.GetButton("Apuntar");
+
+        if (apuntar)
+        {
+            tiempo += Time.deltaTime * 5;
+        }
+        else
+        {
+            tiempo -= Time.deltaTime * 5;
+        }
+
+        tiempo = Mathf.Clamp01(tiempo);
+        Camera.main.orthographicSize = Mathf.Lerp(5, 9, tiempo);
+    }
 }

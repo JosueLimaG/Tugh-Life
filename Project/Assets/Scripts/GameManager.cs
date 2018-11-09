@@ -10,10 +10,16 @@ public class GameManager : MonoBehaviour
 {
     //Aca se almacenan los datos principales del juego para ser consultados en cualquier momento por cualquier otro objeto
 
-    public static GameManager instance;         
+    public static GameManager instance;
     public GameState gameState;
     public CharacterState characterState;
-    private UIManager ui;
+    //private UIManager ui;
+
+    //Configuracion del jugador
+    [Header("Settings")]
+    public float sensibilidadDelMouse = 10f;
+    public bool invertirX = false;
+    public bool invertitY = false;
 
     void Awake()
     {
@@ -45,7 +51,7 @@ public class GameManager : MonoBehaviour
 
                 break;
             case GameState.inGame:
-                ui = GameObject.Find("UI").GetComponent<UIManager>();
+                //ui = GameObject.Find("UI").GetComponent<UIManager>();
                 break;
             case GameState.pauseMenu:
 

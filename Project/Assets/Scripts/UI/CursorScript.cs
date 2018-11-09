@@ -9,13 +9,14 @@ public class CursorScript : MonoBehaviour
     public float sensibilidad = 15f;
     public bool invertX = false;
     public bool invertY = false;
+
     private float mouseX;
     private float mouseY;
-    private Rigidbody2D rb;
+    private Rigidbody rb;
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void FixedUpdate()
@@ -32,16 +33,16 @@ public class CursorScript : MonoBehaviour
         else
             mouseY = Input.GetAxis("AimY");
 
-        rb.velocity = new Vector2(mouseX * sensibilidad, mouseY * sensibilidad);
+        rb.velocity = new Vector3(mouseX * sensibilidad, 0, mouseY * sensibilidad);
 
-        rb.AddForce(new Vector2(Mathf.Sin(Time.time * 4) * 30, Mathf.Cos(Time.time * 4) * 30));
+        rb.AddForce(new Vector3(Mathf.Sin(Time.time * 4) * 30, 0, Mathf.Cos(Time.time * 4) * 30));
 
     }
 
     private void OnBecameInvisible()
     {
-        Vector2 addPos = new Vector2(1, 1);
-        Vector2 playerPos = GameObject.FindGameObjectWithTag("Player").transform.position;
+        Vector3 addPos = new Vector3(1, 0, 1);
+        Vector3 playerPos = GameObject.FindGameObjectWithTag("Player").transform.position;
         transform.position = playerPos + addPos;
     }
 }
