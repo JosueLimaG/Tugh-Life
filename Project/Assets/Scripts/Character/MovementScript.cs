@@ -7,19 +7,20 @@ public class MovementScript : MonoBehaviour
 {
     [HideInInspector] public float velocidad = 7f; //Se oculta la velocidad para evitar su manipulado libre, sin evitar su acceso a otros scripts
     [HideInInspector] public float angulo;
-    [HideInInspector] public  Transform aim;
+    [HideInInspector] public Transform aim;
 
     private Rigidbody rb;
     private Inventario inventario;
     private GameObject armaCerca;
+    private Vector3 joyInput;
 
-    void Start ()
+    void Start()
     {
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
         aim = GameObject.Find("Aim").transform;
         inventario = transform.GetChild(0).GetComponent<Inventario>(); //Se obtiene el componente Inventario del jugador para ejecutar ciertos movimientos basicos.
-        MostrarInvetario();
+        //MostrarInvetario();
     }
 
     void FixedUpdate()
@@ -35,7 +36,7 @@ public class MovementScript : MonoBehaviour
             MostrarInvetario();
         }
 
-        if(Input.GetButtonDown("Descartar"))
+        if (Input.GetButtonDown("Descartar"))
         {
             inventario.NuevaArma();
             MostrarInvetario();
@@ -56,22 +57,30 @@ public class MovementScript : MonoBehaviour
 
     void MovimientoPersonaje()
     {
-        float inputX = Input.GetAxisRaw("Horizontal");
-        float inputZ = Input.GetAxisRaw("Vertical");
+        float inputX = Mathf.Round(Input.GetAxisRaw("Horizontal") * 100) / 100;
+        float inputZ = Mathf.Round(Input.GetAxisRaw("Vertical") * 100) / 100;
 
         rb.velocity = new Vector3(inputX, 0, inputZ) * velocidad;
     }
 
     void MirarAlCursor()
-    {/*
-        Vector3 dis = aim.transform.position - transform.position;
-        dis = aim.transform.InverseTransformDirection(dis);
-        angulo = Mathf.Atan(dis.z / dis.x) * Mathf.Rad2Deg;
-        //angulo = Mathf.Atan2(dis.z, dis.x) * Mathf.Rad2Deg;
-        Debug.Log(angulo);
-        transform.eulerAngles = new Vector3(90, 0, angulo);
-        */
-        transform.LookAt(aim);
-        transform.eulerAngles = new Vector3(90, transform.eulerAngles.y, transform.eulerAngles.z + 90);
+    {
+        /*if (joystick)
+        {
+            float aimX = Input.GetAxisRaw("AimX");
+            float aimY = Input.GetAxisRaw("AimY");
+            joyInput = new Vector2(aimX, aimY);
+
+            if (aimY < 0)
+                joyInput *= -1f;
+
+            float angle = Vector2.Angle(joyInput, new Vector2(1, 0));
+            transform.eulerAngles = new Vector3(90, 0, angle);
+        }
+        else
+        {*/
+            transform.LookAt(aim);
+            transform.eulerAngles = new Vector3(90, transform.eulerAngles.y, transform.eulerAngles.z + 180);
+        //}
     }
 }

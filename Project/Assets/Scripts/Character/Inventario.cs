@@ -21,7 +21,12 @@ public class Inventario : MonoBehaviour
 
     [HideInInspector] public GameObject activa;
 
-    void Awake()
+    private void Start()
+    {
+        OrdenarInventario();
+    }
+
+    void OrdenarInventario()
     {
         int i = 0;
 
@@ -37,14 +42,15 @@ public class Inventario : MonoBehaviour
                 }
                 else
                 {
-                    Destroy(child);
                     Debug.Log("El inventario solo permite 2 armas. " + child.name + " eliminado.");
+                    //Destroy(child.gameObject);
                 }
             }
         }
 
         //En caso de que cuente con solo un arma, o ninguna, se asigna al segundo slot de armas un "desarmado".
 
+       
         if (contenido[0] == null)
         {
             GameObject instance = Instantiate(desarmadoPrefab);
@@ -63,10 +69,11 @@ public class Inventario : MonoBehaviour
         activa = contenido[1];
         CambiarArma();
 
-        Armas arma1 = contenido[0].GetComponent<Armas>();
-        Armas arma2 = contenido[1].GetComponent<Armas>();
-    }
+        arma1 = contenido[0].GetComponent<Armas>();
+        arma2 = contenido[1].GetComponent<Armas>();
 
+        UIManager.instance.ActualizarInfomacion();
+    }
 
     //Metodo para cambiar entre las dos armas almacenadas.
     public void CambiarArma()
@@ -89,29 +96,36 @@ public class Inventario : MonoBehaviour
     //Metodo para intercambiar un arma del inventario con otra. Cuando no haya otra arma disponible cerca se deshechara la que se tiene como activa.
     public void NuevaArma()
     {
-        if (armaPiso == null)
-            armaPiso = desarmadoPrefab;
-
-        if (activa.GetComponent<Armas>().name == "Desarmado" && armaPiso == null)
-            Debug.Log("No se encontraron armas para recoger cerca");
-        else
-            activa.GetComponent<Armas>().Descartar();
-
-        if (activa == contenido[0])
+        Debug.Log("Nueva arma");
+        if (armaPiso == null)                                                       //Se comprueba si hay un arma disponible para ser recogida
         {
-            contenido[0] = armaPiso;
-            activa = contenido[0];
+            Debug.Log("No hay arma cercana");
+            if (activa.GetComponent<Armas>().Nombre() != "Desarmado")                   //Comprueba si el jugador tiene un arma
+            {
+                Debug.Log("El jugador porta un arma:" + activa.GetComponent<Armas>().name);
+                armaPiso = Instantiate(desarmadoPrefab);                            //Se instancia un "Desarmado" para ser asignado en el inventario ya que no puede estar vacio
+                armaPiso.transform.SetParent(transform);                            //El arma se vuelve hija del inventario
+                armaPiso.GetComponent<Armas>().Iniciar();
+                activa.GetComponent<Armas>().Descartar();                           //Se descarta el arma activa
+            }
         }
         else
         {
-            contenido[1] = armaPiso;
-            activa = contenido[1];
+            Debug.Log("Hay un arma para recoger: " + armaPiso.name);
+
+            if (activa.GetComponent<Armas>().name != "Desarmado")                   //Comprueba si el jugador tiene un arma
+            {
+                Debug.Log("El jugador cambiara su " + activa.GetComponent<Armas>().name + " por " + armaPiso.name);
+                activa.GetComponent<Armas>().Descartar();                           //Se descarta el arma actual
+
+                armaPiso.transform.SetParent(transform);                            //El arma se vuelve hija del inventario
+            }
+
+            armaPiso.GetComponent<Armas>().Iniciar();                               //Se activa el arma que se recogio
         }
 
-        Armas arma1 = contenido[0].GetComponent<Armas>();
-        Armas arma2 = contenido[1].GetComponent<Armas>();
-
-        UIManager.instance.ActualizarInfomacion();
+        OrdenarInventario();                                                    //Se ordena el inventario con la nueva informacion
+        CambiarArma();
     }
 
     public string[] ConsultarInventario()
@@ -164,6 +178,8 @@ public class Inventario : MonoBehaviour
     }
 
     //Metodos para comprobar armas disponibles cerca del personaje, en caso de que ya tenga el arma se toma la municion.
+    
+    /*
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Arma")
@@ -189,21 +205,21 @@ public class Inventario : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnTriggerExit(Collider other)
     {
-        if (collision.gameObject.tag == "Arma")
+        if (other.gameObject.tag == "Arma")
         {
             armaPiso = null;
         }
     }
-
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerStay(Collider other)
     {
-        if (collision.gameObject.tag == "Arma")
+        //Debug.Log(other.name);
+        if (other.gameObject.tag == "Arma")
         {
-            armaPiso = collision.gameObject;
+            armaPiso = other.gameObject;
         }
     }
 }

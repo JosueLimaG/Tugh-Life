@@ -18,8 +18,15 @@ public class GameManager : MonoBehaviour
     //Configuracion del jugador
     [Header("Settings")]
     public float sensibilidadDelMouse = 10f;
+    public bool joystick = false;
     public bool invertirX = false;
     public bool invertitY = false;
+
+    private List<GameObject> enemigos = new List<GameObject>();
+    private int id = 0;
+
+    [HideInInspector]
+    public float radioJoystick = 8;
 
     void Awake()
     {
@@ -85,6 +92,37 @@ public class GameManager : MonoBehaviour
         }
 
         characterState = x;
+    }
+
+    public int NuevoEnemigo(GameObject enemigo)
+    {
+        enemigos.Add(enemigo);
+        id++;
+        return id;
+    }
+
+    public void EnemigoEliminado(int id)
+    {
+        int target = 0;
+        int x = 0;
+        foreach(GameObject enemigo in enemigos)
+        {
+            if (enemigo.GetComponent<EnemyPatrolScript>().id == id)
+            {
+                target = x;
+            }
+            x++;
+        }
+        enemigos.RemoveAt(target);
+        Debug.Log(x);
+    }
+
+    public void Disparo(Vector3 position)
+    {
+        foreach(GameObject enemigo in enemigos)
+        {
+            enemigo.GetComponent<EnemyPatrolScript>().OirDisparo(position);
+        }
     }
 
     private void ResetGame()

@@ -12,7 +12,7 @@ public class UIManager : MonoBehaviour
     [HideInInspector] public Image _02Arma;
     [HideInInspector] public Text _02Info;
     [HideInInspector] public bool _antibalas;
-
+    
     [Header("Sprites Armas")]
     public Sprite desarmado;
     public Sprite palo;
@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     public Sprite antibalas;
     public Sprite vacio;
 
+    private Image red;
     private Sprite[] inventarioJugador = new Sprite[3];
     private int[] municionActual = new int[2];
     private int[] municionMaxima = new int[2];
@@ -45,14 +46,13 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        ActualizarInfomacion();
+        //ActualizarInfomacion();
     }
 
     public void ActualizarInventario(string[] items)
     {
         for (int i = 0; i < 2; i++)
         {
-            Debug.Log("Asignando " + items[i] + " en el slot " + i);
             switch (items[i])
             {
                 case "Desarmado":
@@ -85,7 +85,7 @@ public class UIManager : MonoBehaviour
     }
 
     public void ActualizarInfomacion()
-    {
+    {/*
         int[] info = jugador.InfoInventario();
 
         municionActual[0] = info[0];
@@ -107,7 +107,7 @@ public class UIManager : MonoBehaviour
         }
 
         _02Info.text = municionActual[0].ToString() + "/" + municionMaxima[0].ToString() + "  -  " + municionGuardada[0].ToString();
-        _01Info.text = municionActual[1].ToString() + "/" + municionMaxima[1].ToString() + "  -  " + municionGuardada[1].ToString();
+        _01Info.text = municionActual[1].ToString() + "/" + municionMaxima[1].ToString() + "  -  " + municionGuardada[1].ToString();*/
     }
 }
 

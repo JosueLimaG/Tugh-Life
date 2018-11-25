@@ -2,23 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Desarmado : Armas
+public class Palo : Armas
 {
     [Header("Atributos del arma")]
-    public string nombre = "Desarmado";
+    public string nombre = "Palo";
     public float cadenciaDeTiro = 0.25f;
-    public float precision = 90f;
+    public float precision = 100f;
     public float retroceso = 0f;
-    public float alcance = 1f;
+    public float alcance = 0f;
     public int ammo = 1;
     public bool silenciador = true;
     public Sprite imagen;
 
     [Header("Posicion del arma")]
     public Vector3 posicion;
-    public Vector3 rotacion;
+    public Vector3 rotacionEnemigo;
+    public Vector3 rotacionJugador;
 
-    private List<GameObject> enemigos = new List<GameObject>();
+    private GameObject target;
 
     public override string Nombre()
     {
@@ -35,7 +36,7 @@ public class Desarmado : Armas
         return ammo;
     }
 
-    
+
     public override float TiempoRecarga()
     {
         return 0;
@@ -78,35 +79,31 @@ public class Desarmado : Armas
 
     public override Vector3 rotFix()
     {
-        return rotacion;
+        return rotacionEnemigo;
     }
 
     public override Vector3 rotFixPlayer()
     {
-        return new Vector3(0, 0, 0);
+        return rotacionJugador;
     }
 
     public override void Disparo()
     {
-        foreach(GameObject enemigo in enemigos)
+        if (target != null)
         {
-            enemigo.GetComponent<HPScript>().RecibirDano(0);
+            target.GetComponent<HPScript>().RecibirDano(1);
+            Debug.Log("Enemigo detectado");
         }
-        Debug.Log("Disparo de " + Nombre());
     }
 
     public override void VarAmmo(bool recarga, int x)
     {
-        Debug.Log("Los punos no se recargan");
+        Debug.Log("No se puede recargar");
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerStay(Collider other)
     {
-        enemigos.Add(collision.gameObject);
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        enemigos.Remove(collision.gameObject);
+        if (other.tag == "Enemigo")
+            target = other.gameObject;
     }
 }

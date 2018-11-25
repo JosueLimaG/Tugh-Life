@@ -9,6 +9,8 @@ public class AnimScript : MonoBehaviour
     private Rigidbody rb;
     private Inventario inventario;
 
+    private bool resetDisparo = false;
+
     public bool recargando;
     public bool disparo;
 
@@ -22,6 +24,12 @@ public class AnimScript : MonoBehaviour
 	
 	void Update ()
     {
+        if (resetDisparo)
+        {
+            disparo = false;
+            resetDisparo = false;
+        }
+
         if (rb.velocity.x != 0 || rb.velocity.z != 0)
         {
             pies.SetBool("Movimiento", true);
@@ -54,7 +62,11 @@ public class AnimScript : MonoBehaviour
         }
 
         //anim.SetBool("Recarga", recargando);
-        //anim.SetBool("Disparo", disparo);
+        anim.SetBool("Disparo", disparo);
+        if (disparo)
+        {
+            resetDisparo = true;
+        }
 
         Vector2 position = transform.position;
         Vector2 velocidad = rb.velocity;

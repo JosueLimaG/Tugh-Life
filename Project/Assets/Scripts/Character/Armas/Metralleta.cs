@@ -14,7 +14,13 @@ public class Metralleta : Armas
     public float retroceso = 75f;
     public float alcance = 120f;
     public int ammo = 32;
+    public bool sileniador = false;
     public Sprite imagen;
+
+    [Header("Posicion del arma")]
+    public Vector3 posicion;
+    public Vector3 rotacionEnemigo;
+    public Vector3 rotacionJugador;
 
     public override string Nombre()
     {
@@ -56,9 +62,29 @@ public class Metralleta : Armas
         return alcance;
     }
 
+    public override bool Silenciador()
+    {
+        return sileniador;
+    }
+
     public override Sprite Imagen()
     {
         return imagen;
+    }
+
+    public override Vector3 posFix()
+    {
+        return posicion;
+    }
+
+    public override Vector3 rotFix()
+    {
+        return rotacionEnemigo;
+    }
+
+    public override Vector3 rotFixPlayer()
+    {
+        return rotacionJugador;
     }
 
     //Cada arma tiene un tipo de disparo diferente.

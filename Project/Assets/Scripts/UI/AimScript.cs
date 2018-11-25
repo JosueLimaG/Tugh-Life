@@ -6,9 +6,11 @@ public class AimScript : MonoBehaviour
     private Rigidbody rb;
     private float mouseX;
     private float mouseZ;
+    private float radio;
     private Camera cam;
     private Rigidbody player;
     private bool aim;
+    private bool joystick;
     private GameManager manager;
 
     private void Start()
@@ -17,23 +19,53 @@ public class AimScript : MonoBehaviour
         cam = Camera.main;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
         manager = GameManager.instance;
-
+        radio = manager.radioJoystick;
+        joystick = manager.joystick;
     }
 
     private void Update()
     {
-        //Se asigna al objeto Aim la velocidad de el mouse, se comprueba si estan los ejes invertidos.
-        if (manager.invertirX)
-            mouseX = -Input.GetAxis("AimX") * manager.sensibilidadDelMouse;
-        else
-            mouseX = Input.GetAxis("AimX") * manager.sensibilidadDelMouse;
+        aim = Input.GetButton("Apuntar");
+        float aimX = Mathf.Round(Input.GetAxis("AimX") * 100) / 100;
+        float aimY = Mathf.Round(Input.GetAxis("AimY") * 100) / 100;
 
-        if (manager.invertitY)
-            mouseZ = -Input.GetAxis("AimY") * manager.sensibilidadDelMouse;
-        else
-            mouseZ = Input.GetAxis("AimY") * manager.sensibilidadDelMouse;
+        if (joystick && !aim)
+        {
+            if (Mathf.Abs(aimX) > 0.2f && Mathf.Abs(aimY) > 0.2f)
+            {
+                if (manager.invertirX)
+                    mouseX = -aimX * radio;
+                else
+                    mouseX = aimX * radio;
 
-        rb.velocity = new Vector3(mouseX, 0, mouseZ);
+                if (manager.invertitY)
+                    mouseZ = -aimY * radio;
+                else
+                    mouseZ = aimY * radio;
+            }
+            else if (Mathf.Abs(mouseX) == 0 && Mathf.Abs(mouseZ) == 0)
+            {
+                mouseX = 1 * radio;
+                mouseZ = 1 * radio;
+            }
+
+            transform.position = new Vector3(mouseX, 0, mouseZ) + player.transform.position;
+        }
+        else
+        {
+            //Se asigna al objeto Aim la velocidad de el mouse, se comprueba si estan los ejes invertidos.
+            if (manager.invertirX)
+                mouseX = -aimX * manager.sensibilidadDelMouse;
+            else
+                mouseX = aimX * manager.sensibilidadDelMouse;
+
+            if (manager.invertitY)
+                mouseZ = -aimY * manager.sensibilidadDelMouse;
+            else
+                mouseZ = aimY * manager.sensibilidadDelMouse;
+
+            rb.velocity = new Vector3(mouseX, 0, mouseZ);
+        }
 
         //Se limita la posicion del objeto Aim dentro de la vision de la camara.
         var bottomLeft = cam.ScreenToWorldPoint(Vector3.zero);
@@ -47,7 +79,6 @@ public class AimScript : MonoBehaviour
         rb.AddForce(new Vector3(Mathf.Sin(Time.time * 4) * 30, 0, Mathf.Cos(Time.time * 4) * 30));
 
         //El objeto Aim sigue al personaje a no ser que se presione el boton Apuntar
-        aim = Input.GetButton("Apuntar");
 
         if (!aim)
         {

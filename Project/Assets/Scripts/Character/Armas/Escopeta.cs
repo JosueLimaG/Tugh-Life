@@ -8,13 +8,20 @@ public class Escopeta : Armas
     [Header("Atributos del arma")]
     public string nombre = "Escopeta";
     public int maxAmmo = 2;
+    public int numeroDeBalas = 4;
     public float tiempoRecarga = 8f;
     public float cadenciaDeTiro = 0.5f;
     public float precision = 60f;
     public float retroceso = 100f;
     public float alcance = 100f;
     public int ammo = 2;
+    public bool silenciador = false;
     public Sprite imagen;
+
+    [Header("Posicion del arma")]
+    public Vector3 posicion;
+    public Vector3 rotacionEnemigo;
+    public Vector3 rotacionJugador;
 
     public override string Nombre()
     {
@@ -56,17 +63,36 @@ public class Escopeta : Armas
         return alcance;
     }
 
+    public override bool Silenciador()
+    {
+        return silenciador;
+    }
+
     public override Sprite Imagen()
     {
         return imagen;
     }
-    
+
+    public override Vector3 posFix()
+    {
+        return posicion;
+    }
+
+    public override Vector3 rotFix()
+    {
+        return rotacionEnemigo;
+    }
+
+    public override Vector3 rotFixPlayer()
+    {
+        return rotacionJugador;
+    }
     //Cada arma tiene un tipo de disparo diferente.
     public override void Disparo()
     {
         VarAmmo(false, -1);
-        disparoSystem.Emit(8);
-        Debug.Log("Disparo de " + Nombre());
+        disparoSystem.Emit(numeroDeBalas);
+        //Debug.Log("Disparo de " + Nombre());
     }
 
     //Se calcula un raycast para obtener informacion del objetivo al que se apunta.

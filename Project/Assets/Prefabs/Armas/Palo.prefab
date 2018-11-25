@@ -9,35 +9,17 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1542694419366294}
+  m_RootGameObject: {fileID: 1259978900989788}
   m_IsPrefabAsset: 1
---- !u!1 &1542694419366294
+--- !u!1 &1081196928428806
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4867379602033916}
-  - component: {fileID: 114526520715522632}
-  - component: {fileID: 82296235445270320}
-  - component: {fileID: 212835212484900990}
-  m_Layer: 0
-  m_Name: Desarmado
-  m_TagString: Arma
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1821393768188142
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4075840428769062}
-  - component: {fileID: 82310741407764708}
+  - component: {fileID: 4579048490258254}
+  - component: {fileID: 82918688275239426}
   m_Layer: 0
   m_Name: Recarga
   m_TagString: Untagged
@@ -45,39 +27,70 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4075840428769062
+--- !u!1 &1259978900989788
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4779151062813480}
+  - component: {fileID: 114709956498947196}
+  - component: {fileID: 82334728275793270}
+  - component: {fileID: 212460886170845930}
+  - component: {fileID: 65656954833691790}
+  m_Layer: 0
+  m_Name: Palo
+  m_TagString: Arma
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4579048490258254
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1821393768188142}
+  m_GameObject: {fileID: 1081196928428806}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4867379602033916}
+  m_Father: {fileID: 4779151062813480}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4867379602033916
+--- !u!4 &4779151062813480
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1542694419366294}
+  m_GameObject: {fileID: 1259978900989788}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4075840428769062}
+  - {fileID: 4579048490258254}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &82296235445270320
+--- !u!65 &65656954833691790
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1259978900989788}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 1.2800003, z: 2}
+  m_Center: {x: 0, y: -0.9, z: 0}
+--- !u!82 &82334728275793270
 AudioSource:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1542694419366294}
+  m_GameObject: {fileID: 1259978900989788}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
@@ -167,12 +180,12 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!82 &82310741407764708
+--- !u!82 &82918688275239426
 AudioSource:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1821393768188142}
+  m_GameObject: {fileID: 1081196928428806}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
@@ -262,15 +275,15 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &114526520715522632
+--- !u!114 &114709956498947196
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1542694419366294}
+  m_GameObject: {fileID: 1259978900989788}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6701e4de8d8fc449b4d387f3c692a4c, type: 3}
+  m_Script: {fileID: 11500000, guid: e9ad694add9d19f4bbf98770cf7bfb82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   audioDisparo: {fileID: 8300000, guid: 0ca1155116ef6b742877a167d09799bc, type: 3}
@@ -282,22 +295,22 @@ MonoBehaviour:
   cargando: 0
   savedAmmo: 0
   ui: {fileID: 0}
-  nombre: Desarmado
+  nombre: Palo
   cadenciaDeTiro: 0.25
   precision: 100
   retroceso: 0
-  alcance: 1
+  alcance: 0
   ammo: 1
   silenciador: 1
-  imagen: {fileID: 21300000, guid: 9f69b2ecd58b36a4fb7f9753b9d1f997, type: 3}
+  imagen: {fileID: 21300000, guid: aff89afa617cddd4386a2e191e3bbe25, type: 3}
   posicion: {x: 0, y: 0, z: 0}
   rotacion: {x: 0, y: 0, z: 0}
---- !u!212 &212835212484900990
+--- !u!212 &212460886170845930
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1542694419366294}
+  m_GameObject: {fileID: 1259978900989788}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -327,7 +340,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 9f69b2ecd58b36a4fb7f9753b9d1f997, type: 3}
+  m_Sprite: {fileID: 21300000, guid: aff89afa617cddd4386a2e191e3bbe25, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

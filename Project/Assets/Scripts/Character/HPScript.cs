@@ -47,22 +47,36 @@ public class HPScript : MonoBehaviour
         }
     }
 
+    public void RecibirDano(int x)
+    {
+        hp -= x; //Se le quita a la vida un punto por cada bala recibida.
+        if (hp > 1)
+        {
+            initialMovement -= initialMovement / hp; //Se limita la velocidad del movimiento del personaje dependiendo de su vida restante.
+        }
+        velocidad = 0; //Se baja la velocidad del personaje temporalmente.
+
+        if (hp <= 0)
+        {
+            if (gameObject.tag == "Player")
+            {
+                Time.timeScale = 0;
+            }
+            else
+            {
+                GameManager.instance.EnemigoEliminado(enemyScript.id);
+                Destroy(gameObject); //Se comprueba la vida del personaje y si no tiene puntos disponibles es eliminado
+            }
+        }
+    }
 
     private void OnParticleCollision(GameObject other)
     {
         if (other.gameObject.tag == "Arma") //Se comprueba que la particula que golpeo el objeto sea de el rival.
         {
             myPS = other.GetComponent<ParticleSystem>(); //Se obtiene el ParticleSystem de quien realizo el disparo.
-            Rigidbody hitObject = GetComponent<Rigidbody>(); 
             int noOfCollisions = myPS.GetCollisionEvents(gameObject, particleCollisions); //Se obtiene el numero de particulas que golpearon al objeto.
-            hp -= noOfCollisions; //Se le quita a la vida un punto por cada bala recibida.
-            initialMovement -= initialMovement / hp; //Se limita la velocidad del movimiento del personaje dependiendo de su vida restante.
-            velocidad = 0; //Se baja la velocidad del personaje temporalmente.
-
-            if (hp <= 0)
-            {
-                Destroy(gameObject); //Se comprueba la vida del personaje y si no tiene puntos disponibles es eliminado
-            }
+            RecibirDano(noOfCollisions);
         }
     }
 }
