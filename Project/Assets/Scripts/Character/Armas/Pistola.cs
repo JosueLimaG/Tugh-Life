@@ -11,9 +11,9 @@ public class Pistola : Armas
     public float tiempoRecarga = 4f;
     public float cadenciaDeTiro = 1f;
     public float precision = 70f;
-    public float retroceso = 50f;
     public float alcance = 150f;
     public int ammo = 12;
+    public int distancia = 2;
     public bool silenciador = false;
     public Sprite imagen;
 
@@ -37,6 +37,11 @@ public class Pistola : Armas
         return ammo;
     }
 
+    public override int DistanciaDeTiro()
+    {
+        return distancia;
+    }
+
     public override float TiempoRecarga()
     {
         return tiempoRecarga;
@@ -50,11 +55,6 @@ public class Pistola : Armas
     public override float Precision()
     {
         return precision;
-    }
-
-    public override float Retroceso()
-    {
-        return retroceso;
     }
 
     public override float Alcance()
@@ -109,18 +109,43 @@ public class Pistola : Armas
     //Metodo publico usado para cambiar el valor de la municion actual, si el bool recarga es true se llena el cargador restando la municion del total almacenado.
     public override void VarAmmo(bool recarga, int x)
     {
-        if (recarga)
+        if (recarga)                                    //Si la instuccion es recargar, se llena el cargador
         {
             int a = maxAmmo - ammo;
-            savedAmmo -= a;
-
-            if (savedAmmo >= maxAmmo)
-                ammo = maxAmmo;
+            if (savedAmmo >= a)
+            {
+                savedAmmo -= a;
+                ammo += a;
+            }
             else
+            {
                 ammo = savedAmmo;
+                savedAmmo = 0;
+            }
+
+            inventario.balasPistola = savedAmmo;
         }
         else
-            ammo += x;
+            ammo += x;                                  //Si la instuccion no es recargar, se suma la municion al monto asignado en x
     }
 
+    public override void CargarHabilidades(bool player)
+    {
+        Debug.Log(string.Format("Asignando informacion a {0} con jugador = {1}.", Nombre(), player));
+        float[] info = GameManager.instance.ps.ObtenerDatos(1, player);
+        if (info != null)
+        {
+            maxAmmo = (int)info[0];
+            tiempoRecarga = info[1];
+            cadenciaDeTiro = info[2];
+            precision = (int)info[3];
+
+            if (info[4] == 1)
+                silenciador = true;
+            else
+                silenciador = false;
+        }
+        else
+            Debug.Log("Error asignando informacion a " + Nombre());
+    }
 }

@@ -20,7 +20,7 @@ public class MovementScript : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         aim = GameObject.Find("Aim").transform;
         inventario = transform.GetChild(0).GetComponent<Inventario>(); //Se obtiene el componente Inventario del jugador para ejecutar ciertos movimientos basicos.
-        //MostrarInvetario();
+        Invoke("MostrarInvetario", 0.1f);
     }
 
     void FixedUpdate()
@@ -45,8 +45,8 @@ public class MovementScript : MonoBehaviour
 
     void MostrarInvetario()
     {
-        UIManager.instance.ActualizarInventario(inventario.ConsultarInventario());
-        UIManager.instance.ActualizarInfomacion();
+        UIManager.instance.ActualizarInventario();
+        UIManager.instance.ActualizarInformacion();
     }
 
     void ActualizarInventario(int id)

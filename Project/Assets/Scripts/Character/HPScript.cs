@@ -11,6 +11,7 @@ public class HPScript : MonoBehaviour
     private float velocidad;
     private ParticleSystem myPS;
     private List<ParticleCollisionEvent> particleCollisions = new List<ParticleCollisionEvent>();
+    public bool invulnerable = false;
 
     [Header("Vida del personaje")]
     public int hp = 5;
@@ -27,13 +28,18 @@ public class HPScript : MonoBehaviour
         {
             playerScript = GetComponent<MovementScript>();
             initialMovement = playerScript.velocidad;
+
+            if (GameManager.instance.ps.ObtenerDatos(4, true)[4] == 1)
+            {
+                hp *= 2;
+            }
         }
     }
 
     private void FixedUpdate()
     {
         //Cuando el personaje reciba un disparo el float velocidad se baja a 0, aca se lo vuelve a subir a su valor maximo en un tiempo determinado.
-        velocidad += Time.deltaTime * 3;
+        velocidad += Time.deltaTime * 30;
         velocidad = Mathf.Clamp(velocidad, 0, initialMovement);
 
         //Se aplica el valor de velocidad al personaje.
@@ -49,23 +55,27 @@ public class HPScript : MonoBehaviour
 
     public void RecibirDano(int x)
     {
-        hp -= x; //Se le quita a la vida un punto por cada bala recibida.
-        if (hp > 1)
+        if (!invulnerable)
         {
-            initialMovement -= initialMovement / hp; //Se limita la velocidad del movimiento del personaje dependiendo de su vida restante.
-        }
-        velocidad = 0; //Se baja la velocidad del personaje temporalmente.
-
-        if (hp <= 0)
-        {
-            if (gameObject.tag == "Player")
+            hp -= x; //Se le quita a la vida un punto por cada bala recibida.
+            if (hp > 1)
             {
-                Time.timeScale = 0;
+                initialMovement -= initialMovement / hp; //Se limita la velocidad del movimiento del personaje dependiendo de su vida restante.
             }
-            else
+            velocidad = 0; //Se baja la velocidad del personaje temporalmente.
+
+            if (hp <= 0)
             {
-                GameManager.instance.EnemigoEliminado(enemyScript.id);
-                Destroy(gameObject); //Se comprueba la vida del personaje y si no tiene puntos disponibles es eliminado
+                if (gameObject.tag == "Player")
+                {
+                    GameManager.instance.ms.Derrota();
+                }
+                else
+                {
+                    GameManager.instance.EnemigoEliminado(enemyScript.id);
+                    GetComponentInChildren<Inventario>().activa.GetComponent<Armas>().Descartar();
+                    Destroy(gameObject); //Se comprueba la vida del personaje y si no tiene puntos disponibles es eliminado
+                }
             }
         }
     }

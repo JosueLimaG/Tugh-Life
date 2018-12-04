@@ -9,10 +9,10 @@ public abstract class Armas : MonoBehaviour
     public abstract string Nombre();                        //Nombre del arma.
     public abstract int MaxAmmo();                          //Tamano maximo del cargador.
     public abstract int Ammo();                             //Municion actual dentro del cargador.
+    public abstract int DistanciaDeTiro();                  //0 = Cuerpo a cuerpo, >1 La distancia a la que el enemigo se detendra frente al jugador
     public abstract float TiempoRecarga();                  //Tiempo que demora la recarga del arma.
     public abstract float CadenciaDeTiro();                 //Numero de disparos por segundo.
     public abstract float Precision();                      //Rango de direccion de la bala, mmientras mayor sea la precision la bala ira cercana al punto de apuntado.
-    public abstract float Retroceso();                      //Impulso que recibe el jugador en direccion opuesta al disparo por cada bala.
     public abstract float Alcance();                        //Tiempo de vida de la particula de la bala.
     public abstract bool Silenciador();                     //El arma tiene silenciador?
     public abstract Sprite Imagen();                        //Icono del arma para el inventario
@@ -28,7 +28,9 @@ public abstract class Armas : MonoBehaviour
     private Coroutine cargar;                               //Se asigna la corrutina a una variable para poder ser cancelada en caso de cambiar el arma 
 
     public abstract void Disparo();                         //Metodo abstracto usado para el disparo del arma
-    public abstract void VarAmmo(bool recarga, int x);
+    public abstract void VarAmmo(bool recarga, int x);      //Metodo usado para la variacion de municion al disparar o al recargar el arma
+    public abstract void CargarHabilidades(bool player);    //Carga de las habilidades en el uso de armas;
+
 
     [Header("Sonidos")]                                     //Sonidos del arma
     public AudioClip audioDisparo;
@@ -102,19 +104,20 @@ public abstract class Armas : MonoBehaviour
             }
             else
             {
-                StartCoroutine(Recargar(TiempoRecarga()));
+                RecargarArma();
             }
         }
 
         if (player)
         {
-            UIManager.instance.ActualizarInfomacion();
+            UIManager.instance.ActualizarInformacion();
         }
     }
 
     public void RecargarArma()
     {
-        if (Ammo() < MaxAmmo())
+        Debug.Log(savedAmmo);
+        if (Ammo() < MaxAmmo() && savedAmmo > 0)
             cargar = StartCoroutine(Recargar(TiempoRecarga()));
     }
 
@@ -145,7 +148,7 @@ public abstract class Armas : MonoBehaviour
 
                 if (player)
                 {
-                    UIManager.instance.ActualizarInfomacion();
+                    UIManager.instance.ActualizarInformacion();
                 }
             }
             cargando = false;
@@ -161,12 +164,11 @@ public abstract class Armas : MonoBehaviour
             if (transform.parent.parent != null)                            //Comprueba si el arma pertenece a un personaje
             {
                 if (transform.parent.parent.tag == "Player")                //Ese personaje es el jugador?
-                {
                     player = true;                                          //Se indica que el jugador es el dueño del arma
-                }
                 else
                     player = false;                                         //Se indica que el personaje que tiene el arma no es el jugador
 
+                CargarHabilidades(player);
                 activo = true;                                              //Si el arma pertenece a algun pesonaje, se indica que el arma esta activa
                 inventario = transform.parent.GetComponent<Inventario>();   //Al ser activa, se obtiene el componente Inventario de quien tiene el arma
             }
@@ -190,8 +192,8 @@ public abstract class Armas : MonoBehaviour
             transform.localPosition = posFix();
             if (transform.parent.parent.tag == "Enemigo")
                 transform.localRotation = Quaternion.Euler(rotFix());
-            //else
-                //transform.localRotation = Quaternion.Euler(rotFix().x, transform.localRotation.y, rotFix().y);
+            else
+                transform.localRotation = Quaternion.Euler(rotFixPlayer());
         }
         else
         {
@@ -209,6 +211,7 @@ public abstract class Armas : MonoBehaviour
 
     void ObtenerInfo()
     {
+        print("obteniendo info de: " + name);
         anim = transform.parent.parent.GetComponent<AnimScript>();
         sr.enabled = false;
     
@@ -283,6 +286,12 @@ public abstract class Armas : MonoBehaviour
             activo = false;
             Iniciar();
         }
+
+        if (cargar != null)
+            StopCoroutine(cargar);
+        cargando = false;
+        print(name);
+        anim.Cargando(cargando);
     }
 
     //Obtener la informacion del arma seleccionada.
@@ -295,6 +304,5 @@ public abstract class Armas : MonoBehaviour
         info[4] = "Tiempo de recarga: " + TiempoRecarga().ToString();
         info[5] = "Cadencia de tiro: " + CadenciaDeTiro().ToString();
         info[6] = "Precision: " + Precision().ToString() + "%";
-        info[7] = "Retroceso: " + Retroceso().ToString();
     }
 }

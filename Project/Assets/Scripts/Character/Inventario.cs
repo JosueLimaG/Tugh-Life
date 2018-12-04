@@ -7,23 +7,83 @@ public class Inventario : MonoBehaviour
     //La intencion es que todos los NPC tambien tengan un elemento Inventario y puedan realizar las mismas acciones que el jugador, por ello se llaman a los metodos desde el script jugador, que detecta los input
 
     public GameObject desarmadoPrefab;
+    public GameObject paloPrefab;
+    public GameObject cuchilloPrefab;
+    public GameObject pistolaPrefab;
+    public GameObject metralletaPrefab;
+    public GameObject escopetaPrefab;
 
     GameObject[] contenido = new GameObject[2];
     private GameObject armaPiso;
+    private GameObject armaTemp;
+    private GameObject armaTemp2;
     private bool antibalas = false;
     private Armas arma1;
     private Armas arma2;
 
-    [Header("Municion disponible")]
-    public int balasPistola;
-    public int balasEscopeta;
-    public int balasMetralleta;
-
+    [HideInInspector] public int balasPistola;
+    [HideInInspector] public int balasEscopeta;
+    [HideInInspector] public int balasMetralleta;
     [HideInInspector] public GameObject activa;
 
     private void Start()
     {
+        float[] temp = GameManager.instance.ps.ObtenerDatos(4, transform.parent.tag == "Player");
+        balasEscopeta = (int)temp[1];
+        balasMetralleta = (int)temp[2];
+        balasPistola = (int)temp[3];
+
+        ObtenerArmas();
         OrdenarInventario();
+    }
+
+    void ObtenerArmas()
+    {
+        if (transform.parent.tag == "Player")
+        {
+            switch (GameManager.instance.ps.arma2)
+            {
+                case "Pistola":
+                    armaTemp = Instantiate(pistolaPrefab);
+                    break;
+                case "Metralleta":
+                    armaTemp = Instantiate(metralletaPrefab);
+                    break;
+                case "Escopeta":
+                    armaTemp = Instantiate(escopetaPrefab);
+                    break;
+                case "Palo":
+                    armaTemp = Instantiate(paloPrefab);
+                    break;
+                case "Cuchillo":
+                    armaTemp = Instantiate(cuchilloPrefab);
+                    break;
+            }
+
+            armaTemp.transform.parent = transform;
+            armaTemp.GetComponent<Armas>().Iniciar();
+
+            switch (GameManager.instance.ps.arma1)
+            {
+                case "Pistola":
+                    armaTemp2 = Instantiate(pistolaPrefab);
+                    break;
+                case "Metralleta":
+                    armaTemp2 = Instantiate(metralletaPrefab);
+                    break;
+                case "Escopeta":
+                    armaTemp2 = Instantiate(escopetaPrefab);
+                    break;
+                case "Palo":
+                    armaTemp2 = Instantiate(paloPrefab);
+                    break;
+                case "Cuchillo":
+                    armaTemp2 = Instantiate(cuchilloPrefab);
+                    break;
+            }
+            armaTemp2.transform.parent = transform;
+            armaTemp2.GetComponent<Armas>().Iniciar();
+        }
     }
 
     void OrdenarInventario()
@@ -33,6 +93,7 @@ public class Inventario : MonoBehaviour
         //Se cuentan los elementos dentro del inventario del personaje y se eliminan los que estan de sobra, un personaje puede cargar solo dos armas.
         foreach (Transform child in transform)
         {
+            print(child.name);
             if (child.tag == "Arma")
             {
                 if (i < 2)
@@ -42,14 +103,12 @@ public class Inventario : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("El inventario solo permite 2 armas. " + child.name + " eliminado.");
-                    //Destroy(child.gameObject);
+                    Debug.Log("El inventario solo permite 2 armas");
                 }
             }
         }
 
         //En caso de que cuente con solo un arma, o ninguna, se asigna al segundo slot de armas un "desarmado".
-
        
         if (contenido[0] == null)
         {
@@ -71,8 +130,6 @@ public class Inventario : MonoBehaviour
 
         arma1 = contenido[0].GetComponent<Armas>();
         arma2 = contenido[1].GetComponent<Armas>();
-
-        UIManager.instance.ActualizarInfomacion();
     }
 
     //Metodo para cambiar entre las dos armas almacenadas.
@@ -124,7 +181,8 @@ public class Inventario : MonoBehaviour
             armaPiso.GetComponent<Armas>().Iniciar();                               //Se activa el arma que se recogio
         }
 
-        OrdenarInventario();                                                    //Se ordena el inventario con la nueva informacion
+        armaPiso = null;
+        OrdenarInventario();                                                        //Se ordena el inventario con la nueva informacion
         CambiarArma();
     }
 
@@ -177,36 +235,6 @@ public class Inventario : MonoBehaviour
         return info;
     }
 
-    //Metodos para comprobar armas disponibles cerca del personaje, en caso de que ya tenga el arma se toma la municion.
-    
-    /*
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Arma")
-        {
-            armaPiso = collision.gameObject;
-            Armas temp = armaPiso.GetComponent<Armas>();
-            if (!temp.activo && (contenido[0].GetComponent<Armas>().Nombre() == temp.Nombre() || contenido[1].GetComponent<Armas>().Nombre() == temp.Nombre()))
-            {
-                switch (temp.Nombre())
-                {
-                    case "Pistola":
-                        balasPistola += temp.Ammo();
-                        temp.VarAmmo(false, -temp.Ammo());
-                        break;
-                    case "Escopeta":
-                        balasEscopeta += temp.Ammo();
-                        temp.VarAmmo(false, -temp.Ammo());
-                        break;
-                    case "Metralleta":
-                        balasMetralleta += temp.Ammo();
-                        temp.VarAmmo(false, -temp.Ammo());
-                        break;
-                }
-            }
-        }
-    }*/
-
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Arma")
@@ -214,9 +242,9 @@ public class Inventario : MonoBehaviour
             armaPiso = null;
         }
     }
+
     private void OnTriggerStay(Collider other)
     {
-        //Debug.Log(other.name);
         if (other.gameObject.tag == "Arma")
         {
             armaPiso = other.gameObject;

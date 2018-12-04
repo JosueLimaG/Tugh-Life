@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class Desarmado : Armas
     public float retroceso = 0f;
     public float alcance = 1f;
     public int ammo = 1;
+    public int distancia = 0;
     public bool silenciador = true;
     public Sprite imagen;
 
@@ -35,7 +37,11 @@ public class Desarmado : Armas
         return ammo;
     }
 
-    
+    public override int DistanciaDeTiro()
+    {
+        return distancia;
+    }
+
     public override float TiempoRecarga()
     {
         return 0;
@@ -49,11 +55,6 @@ public class Desarmado : Armas
     public override float Precision()
     {
         return precision;
-    }
-
-    public override float Retroceso()
-    {
-        return retroceso;
     }
 
     public override float Alcance()
@@ -100,6 +101,11 @@ public class Desarmado : Armas
         Debug.Log("Los punos no se recargan");
     }
 
+    public override void CargarHabilidades(bool player)
+    {
+        Debug.Log("No cuenta con habilidades");
+    }
+    
     private void OnCollisionEnter(Collision collision)
     {
         enemigos.Add(collision.gameObject);

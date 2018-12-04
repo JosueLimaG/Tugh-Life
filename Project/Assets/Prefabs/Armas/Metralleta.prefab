@@ -289,13 +289,14 @@ MonoBehaviour:
   tiempoRecarga: 4
   cadenciaDeTiro: 0.1
   precision: 85
-  retroceso: 75
   alcance: 120
   ammo: 32
+  distancia: 3
   sileniador: 0
   imagen: {fileID: 21300000, guid: 511fa6e43ee07d144b347a40a451b494, type: 3}
-  posicion: {x: 0, y: 0, z: 0}
-  rotacion: {x: 0, y: 0, z: 0}
+  posicion: {x: 0.2, y: -1, z: 0}
+  rotacionEnemigo: {x: 0, y: 90, z: -90}
+  rotacionJugador: {x: 0, y: 0, z: -90}
 --- !u!135 &135418412550619764
 SphereCollider:
   m_ObjectHideFlags: 1

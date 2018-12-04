@@ -11,6 +11,7 @@ public class Palo : Armas
     public float retroceso = 0f;
     public float alcance = 0f;
     public int ammo = 1;
+    public int distancia = 0;
     public bool silenciador = true;
     public Sprite imagen;
 
@@ -36,6 +37,10 @@ public class Palo : Armas
         return ammo;
     }
 
+    public override int DistanciaDeTiro()
+    {
+        return distancia;
+    }
 
     public override float TiempoRecarga()
     {
@@ -50,11 +55,6 @@ public class Palo : Armas
     public override float Precision()
     {
         return precision;
-    }
-
-    public override float Retroceso()
-    {
-        return retroceso;
     }
 
     public override float Alcance()
@@ -99,6 +99,11 @@ public class Palo : Armas
     public override void VarAmmo(bool recarga, int x)
     {
         Debug.Log("No se puede recargar");
+    }
+
+    public override void CargarHabilidades(bool player)
+    {
+        Debug.Log("No cuenta con habilidades");
     }
 
     private void OnTriggerStay(Collider other)

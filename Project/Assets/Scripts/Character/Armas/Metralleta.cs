@@ -11,10 +11,10 @@ public class Metralleta : Armas
     public float tiempoRecarga = 5f;
     public float cadenciaDeTiro = 0.1f;
     public float precision = 90f;
-    public float retroceso = 75f;
     public float alcance = 120f;
     public int ammo = 32;
-    public bool sileniador = false;
+    public int distancia = 3;
+    public bool silenciador = false;
     public Sprite imagen;
 
     [Header("Posicion del arma")]
@@ -36,6 +36,10 @@ public class Metralleta : Armas
     {
         return ammo;
     }
+    public override int DistanciaDeTiro()
+    {
+        return distancia;
+    }
 
     public override float TiempoRecarga()
     {
@@ -52,11 +56,6 @@ public class Metralleta : Armas
         return precision;
     }
 
-    public override float Retroceso()
-    {
-        return retroceso;
-    }
-
     public override float Alcance()
     {
         return alcance;
@@ -64,7 +63,7 @@ public class Metralleta : Armas
 
     public override bool Silenciador()
     {
-        return sileniador;
+        return silenciador;
     }
 
     public override Sprite Imagen()
@@ -109,18 +108,43 @@ public class Metralleta : Armas
     //Metodo publico usado para cambiar el valor de la municion actual, si el bool recarga es true se llena el cargador restando la municion del total almacenado.
     public override void VarAmmo(bool recarga, int x)
     {
-        if (recarga)
+        if (recarga)                                    //Si la instuccion es recargar, se llena el cargador
         {
             int a = maxAmmo - ammo;
-            savedAmmo -= a;
-
-            if (savedAmmo >= maxAmmo)
-                ammo = maxAmmo;
+            if (savedAmmo >= a)
+            {
+                savedAmmo -= a;
+                ammo += a;
+            }
             else
+            {
                 ammo = savedAmmo;
+                savedAmmo = 0;
+            }
+
+            inventario.balasMetralleta = savedAmmo;
         }
         else
-            ammo += x;
+            ammo += x;                                  //Si la instuccion no es recargar, se suma la municion al monto asignado en x
     }
 
+    public override void CargarHabilidades(bool player)
+    {
+        Debug.Log(string.Format("Asignando informacion a {0} con jugador = {1}.", Nombre(), player));
+        float[] info = GameManager.instance.ps.ObtenerDatos(2, player);
+        if (info != null)
+        {
+            maxAmmo = (int)info[0];
+            tiempoRecarga = info[1];
+            cadenciaDeTiro = info[2];
+            precision = (int)info[3];
+
+            if (info[4] == 1)
+                silenciador = true;
+            else
+                silenciador = false;
+        }
+        else
+            Debug.Log("Error asignando informacion a " + Nombre());
+    }
 }
