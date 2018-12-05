@@ -15,6 +15,5 @@ public class MouseScript : MonoBehaviour
 	void Update ()
     {
         mousePos = cam.WorldToScreenPoint(transform.position);
-        Debug.Log(mousePos);
 	}
 }

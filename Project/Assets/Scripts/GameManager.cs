@@ -37,8 +37,10 @@ public class GameManager : MonoBehaviour
         }
         else if (instance != this)
         {
+            Destroy(instance.gameObject);
+            instance = this;
             //instance.ResetGame();
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
 
         ps = GetComponent<PlayerScript>();
@@ -48,12 +50,17 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Reset();
+    }
+
+    public void Reset()
+    {
         gameState = GameState.mainMenu;
+        enemigos.Clear();
     }
 
     public int NuevoEnemigo(GameObject enemigo)
     {
-        print("Nuevo enemigo: " + enemigo.name);
         enemigos.Add(enemigo);
         id++;
         return id;
@@ -61,7 +68,6 @@ public class GameManager : MonoBehaviour
 
     public void EnemigoEliminado(int id)
     {
-        print("Enemigo eliminado");
         int target = 0;
         int x = 0;
         foreach(GameObject enemigo in enemigos)
@@ -71,7 +77,6 @@ public class GameManager : MonoBehaviour
                 target = x;
             }
             x++;
-            print("Quedan " + x);
         }
         enemigos.RemoveAt(target);
         if (x == 1 && ms.eliminarATodos)
@@ -82,7 +87,7 @@ public class GameManager : MonoBehaviour
 
     public void Disparo(Vector3 position)
     {
-        foreach(GameObject enemigo in enemigos)
+        foreach (GameObject enemigo in enemigos)
         {
             enemigo.GetComponent<EnemyPatrolScript>().OirDisparo(position);
         }

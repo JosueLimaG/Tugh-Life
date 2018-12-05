@@ -76,7 +76,6 @@ public class UIManager : MonoBehaviour
                     inventarioJugador[i] = cuchillo;
                     break;
                 default:
-                    Debug.Log("Error asignando el sprite del objeto en inventario");
                     inventarioJugador[i] = desarmado;
                     break;
             }

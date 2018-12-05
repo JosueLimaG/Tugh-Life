@@ -75,10 +75,13 @@ public class MissionScript : MonoBehaviour
         if (Input.GetButtonDown("Disparo") && final)
             SceneManager.LoadScene(0);
 
-        if(derrota)
+        if (derrota)
         {
-            if (Input.GetButtonDown("Disparo")) 
-                SceneManager.LoadScene(1);
+            if (Input.GetButtonDown("Disparo"))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                GameManager.instance.Reset();
+            }
             if (Input.GetButtonDown("Recargar"))
                 SceneManager.LoadScene(0);
         }
@@ -109,6 +112,7 @@ public class MissionScript : MonoBehaviour
         GameManager.instance.ps.SaveMissionResults(dinero, experiencia,pistola, metralleta, escopeta);
         panel.SetActive(true);
         hud.SetActive(false);
+        final = true;
         Time.timeScale = 0;
     }
 

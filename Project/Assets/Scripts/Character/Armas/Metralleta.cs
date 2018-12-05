@@ -91,7 +91,6 @@ public class Metralleta : Armas
     {
         VarAmmo(false, -1);
         disparoSystem.Emit(1);
-        Debug.Log("Disparo de " + Nombre());
     }
 
     //Se calcula un raycast para obtener informacion del objetivo al que se apunta.
@@ -130,7 +129,6 @@ public class Metralleta : Armas
 
     public override void CargarHabilidades(bool player)
     {
-        Debug.Log(string.Format("Asignando informacion a {0} con jugador = {1}.", Nombre(), player));
         float[] info = GameManager.instance.ps.ObtenerDatos(2, player);
         if (info != null)
         {
@@ -144,7 +142,5 @@ public class Metralleta : Armas
             else
                 silenciador = false;
         }
-        else
-            Debug.Log("Error asignando informacion a " + Nombre());
     }
 }

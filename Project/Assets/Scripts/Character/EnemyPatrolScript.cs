@@ -15,7 +15,7 @@ public class EnemyPatrolScript : MonoBehaviour
     public float tiempoEspera = 4f;         //Segundos que esperara el enemigo antes de dirigirse al siguiente punto de patrullaje
     public float velocidad = 7;             //Velocidad de movimiento del enemigo
     public float anguloDeVision = 100f;     //Angulo de vision conica en la que podra ver al jugador
-    public float tiempoDeVision = 1f;       //Segundos que transcurren viendo al jugador antes de detectarlo
+     float tiempoDeVision = 0.2f;       //Segundos que transcurren viendo al jugador antes de detectarlo
 
     public int id;                          //ID del enemigo. Se usa para darle alertas de disparo y mantener una lista de enemigos con vida restantes
 

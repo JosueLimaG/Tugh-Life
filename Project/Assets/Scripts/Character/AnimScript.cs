@@ -99,7 +99,6 @@ public class AnimScript : MonoBehaviour
         }
         catch
         {
-            print("Error al setear el bool de: " + name);
         }
     }
 }

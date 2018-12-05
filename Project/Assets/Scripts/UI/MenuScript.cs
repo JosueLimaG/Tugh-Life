@@ -16,6 +16,7 @@ public class MenuScript : MonoBehaviour
     public Text recursos;
     public Text mensaje;
     public EventSystem eventSystem;
+    public Button scene;
 
     [Header("Sprites de armas")]
     public Sprite desarmado;
@@ -140,7 +141,6 @@ public class MenuScript : MonoBehaviour
         }
         catch
         {
-            Debug.Log("No se encontro un boton en la escena");
         }
     }
 
@@ -546,7 +546,16 @@ public class MenuScript : MonoBehaviour
         GuardarInfo();
         GameManager.instance.ps.SaveInfo(mejorasDisp);
         GameManager.instance.gameState = GameState.inGame;
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(int.Parse(scene.GetComponentInChildren<Text>().text));
+    }
+
+    public void ChangeScene()
+    {
+        int x = int.Parse(scene.GetComponentInChildren<Text>().text);
+        x++;
+        if (x > 2)
+            x = 1;
+        scene.GetComponentInChildren<Text>().text = x.ToString();
     }
 
     void GuardarInfo()

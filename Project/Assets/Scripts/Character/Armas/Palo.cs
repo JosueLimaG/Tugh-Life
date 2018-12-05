@@ -92,18 +92,15 @@ public class Palo : Armas
         if (target != null)
         {
             target.GetComponent<HPScript>().RecibirDano(1);
-            Debug.Log("Enemigo detectado");
         }
     }
 
     public override void VarAmmo(bool recarga, int x)
     {
-        Debug.Log("No se puede recargar");
     }
 
     public override void CargarHabilidades(bool player)
     {
-        Debug.Log("No cuenta con habilidades");
     }
 
     private void OnTriggerStay(Collider other)

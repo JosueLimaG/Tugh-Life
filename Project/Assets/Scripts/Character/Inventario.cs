@@ -93,17 +93,12 @@ public class Inventario : MonoBehaviour
         //Se cuentan los elementos dentro del inventario del personaje y se eliminan los que estan de sobra, un personaje puede cargar solo dos armas.
         foreach (Transform child in transform)
         {
-            print(child.name);
             if (child.tag == "Arma")
             {
                 if (i < 2)
                 {
                     contenido[i] = child.gameObject;
                     i++;
-                }
-                else
-                {
-                    Debug.Log("El inventario solo permite 2 armas");
                 }
             }
         }
@@ -153,13 +148,10 @@ public class Inventario : MonoBehaviour
     //Metodo para intercambiar un arma del inventario con otra. Cuando no haya otra arma disponible cerca se deshechara la que se tiene como activa.
     public void NuevaArma()
     {
-        Debug.Log("Nueva arma");
         if (armaPiso == null)                                                       //Se comprueba si hay un arma disponible para ser recogida
         {
-            Debug.Log("No hay arma cercana");
             if (activa.GetComponent<Armas>().Nombre() != "Desarmado")                   //Comprueba si el jugador tiene un arma
             {
-                Debug.Log("El jugador porta un arma:" + activa.GetComponent<Armas>().name);
                 armaPiso = Instantiate(desarmadoPrefab);                            //Se instancia un "Desarmado" para ser asignado en el inventario ya que no puede estar vacio
                 armaPiso.transform.SetParent(transform);                            //El arma se vuelve hija del inventario
                 armaPiso.GetComponent<Armas>().Iniciar();
@@ -168,11 +160,9 @@ public class Inventario : MonoBehaviour
         }
         else
         {
-            Debug.Log("Hay un arma para recoger: " + armaPiso.name);
 
             if (activa.GetComponent<Armas>().name != "Desarmado")                   //Comprueba si el jugador tiene un arma
             {
-                Debug.Log("El jugador cambiara su " + activa.GetComponent<Armas>().name + " por " + armaPiso.name);
                 activa.GetComponent<Armas>().Descartar();                           //Se descarta el arma actual
 
                 armaPiso.transform.SetParent(transform);                            //El arma se vuelve hija del inventario

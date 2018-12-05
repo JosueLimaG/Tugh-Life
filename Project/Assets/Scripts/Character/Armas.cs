@@ -116,7 +116,6 @@ public abstract class Armas : MonoBehaviour
 
     public void RecargarArma()
     {
-        Debug.Log(savedAmmo);
         if (Ammo() < MaxAmmo() && savedAmmo > 0)
             cargar = StartCoroutine(Recargar(TiempoRecarga()));
     }
@@ -211,7 +210,6 @@ public abstract class Armas : MonoBehaviour
 
     void ObtenerInfo()
     {
-        print("obteniendo info de: " + name);
         anim = transform.parent.parent.GetComponent<AnimScript>();
         sr.enabled = false;
     
@@ -231,7 +229,6 @@ public abstract class Armas : MonoBehaviour
                 savedAmmo = 999;
                 break;
             default:
-                Debug.Log("Error al obtener la municion almacenada en el tipo de arma.");
                 savedAmmo = 0;
                 break;
         }
@@ -266,7 +263,6 @@ public abstract class Armas : MonoBehaviour
         }
         catch
         {
-            Debug.Log("El arma actual no cuenta con emisor de particulas. " + name);
         }
     }
 
@@ -290,7 +286,6 @@ public abstract class Armas : MonoBehaviour
         if (cargar != null)
             StopCoroutine(cargar);
         cargando = false;
-        print(name);
         anim.Cargando(cargando);
     }
 

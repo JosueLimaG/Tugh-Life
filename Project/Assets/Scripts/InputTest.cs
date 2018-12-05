@@ -20,10 +20,6 @@ public class InputTest : MonoBehaviour
         if (enVista)
         {
             tiempo += Time.deltaTime;
-            if(tiempo >= timepoDeVision)
-            {
-                Debug.Log("Visto");
-            }
         }
         else
         {

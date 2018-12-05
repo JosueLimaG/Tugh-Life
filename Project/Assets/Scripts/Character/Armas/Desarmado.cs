@@ -93,17 +93,14 @@ public class Desarmado : Armas
         {
             enemigo.GetComponent<HPScript>().RecibirDano(0);
         }
-        Debug.Log("Disparo de " + Nombre());
     }
 
     public override void VarAmmo(bool recarga, int x)
     {
-        Debug.Log("Los punos no se recargan");
     }
 
     public override void CargarHabilidades(bool player)
     {
-        Debug.Log("No cuenta con habilidades");
     }
     
     private void OnCollisionEnter(Collision collision)
