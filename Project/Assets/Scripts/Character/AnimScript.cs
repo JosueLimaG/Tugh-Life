@@ -24,7 +24,7 @@ public class AnimScript : MonoBehaviour
 
     void Update ()
     {
-        //Pies();                           //Deshabilitado por bugs visuales y problemas al aplicar el angulo correcto
+        Pies();
 
         Disparo();
 
@@ -33,20 +33,20 @@ public class AnimScript : MonoBehaviour
 
     void Pies()
     {
-        if (Mathf.Abs(rb.velocity.x) > 0.1f || Mathf.Abs(rb.velocity.z) > 0.1f)
+        if (Mathf.Abs(rb.velocity.x) > 0.2f || Mathf.Abs(rb.velocity.z) > 0.2f)
         {
             pies.SetBool("Movimiento", true);
-            float x = transform.position.x - rb.velocity.x; 
-            float z = transform.position.z - rb.velocity.z; 
+            float x = rb.velocity.x; 
+            float z = rb.velocity.z; 
 
             float angulo = Mathf.Atan(z / x) * Mathf.Rad2Deg;      
 
             if (x < 0 && z < 0)
-                angulo = ((90 - angulo) * -1) + -90; 
+                angulo = ((90 - angulo) * -1) + -90;
             else if (x < 0 && z > 0)
                 angulo = 180 + angulo;
 
-            pies.transform.eulerAngles = new Vector3(0, 0, 30);
+            pies.gameObject.transform.localEulerAngles = new Vector3(0, 0, angulo + 90);
         }
         else
         {

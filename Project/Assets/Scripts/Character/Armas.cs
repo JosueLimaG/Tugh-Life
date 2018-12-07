@@ -68,7 +68,7 @@ public abstract class Armas : MonoBehaviour
             timer = Mathf.Clamp(timer, 0, CadenciaDeTiro() + 0.1f);
             if (transform.parent.parent.tag == "Player")
             {
-                disparo = Input.GetButton("Disparo");
+                disparo = Input.GetButton("R2");
 
                 if (disparo)
                 {
@@ -78,7 +78,7 @@ public abstract class Armas : MonoBehaviour
                 // if (Input.GetButtonDown("Descartar"))
                 //Descartar();
 
-                if (Input.GetButtonDown("Recargar"))
+                if (Input.GetButtonDown("Square"))
                     RecargarArma();
             }
         }

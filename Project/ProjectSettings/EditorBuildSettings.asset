@@ -15,6 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Piso2.unity
     guid: e2fc5a8b7b350044ba99d71c7971fd3e
   - enabled: 1
-    path: Assets/Scenes/Piso3.unity
-    guid: 42b37df3b5970f6489a8fdddc8e72082
+    path: Assets/Scenes/Piso4.unity
+    guid: f00a107bf1f6b304c94b7a682ff47e6e
   m_configObjects: {}

@@ -22,9 +22,12 @@ public class GameManager : MonoBehaviour
     public bool invertitY = false;
     public MissionScript ms;
 
+    public AudioClip[] clips;
+
+    private AudioSource source;
     private List<GameObject> enemigos = new List<GameObject>();
     private int id = 0;
-
+    private int musicInt;
     [HideInInspector]
     public float radioJoystick = 8;
 
@@ -37,8 +40,7 @@ public class GameManager : MonoBehaviour
         }
         else if (instance != this)
         {
-            Destroy(instance.gameObject);
-            instance = this;
+            Destroy(this);
             //instance.ResetGame();
             //Destroy(gameObject);
         }
@@ -51,6 +53,22 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Reset();
+        //source.clip = clips[0];
+        //source.Play();
+    }
+
+    private void Update()
+    { /*
+        if (!source.isPlaying)
+        {
+            musicInt++;
+
+            if (musicInt > clips.Length)
+                musicInt = 0;
+
+            source.clip = clips[musicInt];
+            source.Play();
+        } */
     }
 
     public void Reset()

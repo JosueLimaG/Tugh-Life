@@ -5,27 +5,17 @@ using UnityEngine.UI;
 
 public class Game : MonoBehaviour {
 
-    public Text puntosTXT;
-    public Text nombreTXT;
+    public InputField correoTXT;
+    public InputField celularTXT;
+    public InputField diamantesTXT;
+    public InputField nivelTXT;
     public GameObject panelGO;
     public GameObject rankingGO;
     int puntosDB;
 
-    public void GenerarPuntos()
-    {
-        float puntos = Random.Range(0,1500);
-        puntosDB = (int)puntos;
-        puntosTXT.text = puntos.ToString();
-    }
-
-    public void ActivarPanel()
-    {
-        panelGO.SetActive(true);
-    }
-
     public void GuardarPuntosDB()
     {
-        rankingGO.GetComponent<RankingManager>().InsertarPuntos(nombreTXT.text, puntosDB);
-        panelGO.SetActive(false);
+        puntosDB = Random.Range(0, 1500);
+        rankingGO.GetComponent<RankingManager>().InsertarPuntos(correoTXT.text, celularTXT.text, puntosDB, diamantesTXT.text, nivelTXT.text);
     }
 }

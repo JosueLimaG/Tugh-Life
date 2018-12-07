@@ -30,26 +30,26 @@ public class PlayerScript : MonoBehaviour
     public int m_maxAmmo = 32;
     public float m_tiempoRecarga = 4f;
     public float m_cadenciaDeTiro = 0.1f;
-    public float m_precision = 85f;
+    public float m_precision = 75f;
     public int m_silenciador = 0;
 
     private static int mDef_maxAmmo = 32;
     private static float mDef_tiempoRecarga = 4f;
     private static float mDef_cadenciaDeTiro = 0.1f;
-    private static float mDef_precision = 85f;
+    private static float mDef_precision = 75f;
     private static int mDef_silenciador = 0;
 
     [Header("Manejo de Pistola")]
     public int p_maxAmmo = 6;
     public float p_tiempoRecarga = 2.5f;
     public float p_cadenciaDeTiro = 0.2f;
-    public float p_precision = 70f;
+    public float p_precision = 65f;
     public int p_silenciador = 0;
 
     private static int pDef_maxAmmo = 6;
     private static float pDef_tiempoRecarga = 2.5f;
     private static float pDef_cadenciaDeTiro = 0.2f;
-    private static float pDef_precision = 70f;
+    private static float pDef_precision = 65f;
     private static int pDef_silenciador = 0;
 
     [Header("Inventario")]
@@ -79,7 +79,7 @@ public class PlayerScript : MonoBehaviour
             Destroy(this);
         }
 
-        if(PlayerPrefs.GetFloat("Velocidad") != 0)
+        if(PlayerPrefs.GetFloat("velocidad") != 0)
             LoadInfo();
     }
 

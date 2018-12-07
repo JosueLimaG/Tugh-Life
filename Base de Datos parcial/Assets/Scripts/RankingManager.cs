@@ -64,14 +64,16 @@ public class RankingManager : MonoBehaviour {
         rankings.Clear();
         AbrirDB();
         comandosDB = conexionDB.CreateCommand();
-        string sqlQuery = "select * from Ranking";
+        //string sqlQuery = "select * from Ranking";
+
+        string sqlQuery = "select * from Ranking join Puntos where Ranking.PlayerId = Puntos.PlayerID";
+
         comandosDB.CommandText = sqlQuery;
 
         leerDatos = comandosDB.ExecuteReader();
         while (leerDatos.Read())
         {
-            rankings.Add(new Ranking(leerDatos.GetInt32(0), leerDatos.GetString(1), leerDatos.GetInt32(2),
-                            leerDatos.GetDateTime(3)));
+            rankings.Add(new Ranking(leerDatos.GetInt32(0), leerDatos.GetString(1), leerDatos.GetInt32(2), leerDatos.GetDateTime(3), leerDatos.GetInt32(4), leerDatos.GetInt32(5), leerDatos.GetInt32(6)));
         }
         leerDatos.Close();
         leerDatos = null;
@@ -79,12 +81,15 @@ public class RankingManager : MonoBehaviour {
         rankings.Sort();
     }
 
-    public void InsertarPuntos(string n, int s)
+    public void InsertarPuntos(string correo, string celular, int puntos, string diamantes, string nivel)
     {
         AbrirDB();
         comandosDB = conexionDB.CreateCommand();
-        string sqlQuery = String.Format("insert into Ranking(Name,Score) values(\"{0}\",\"{1}\")",n,s);
+        string sqlQuery = String.Format("insert into Ranking(eMail, Phone, Score) values(\"{0}\",\"{1}\",\"{2}\")", correo, celular, puntos);
         comandosDB.CommandText = sqlQuery;
+        comandosDB.ExecuteScalar();
+        string sqlQuery2 = string.Format("insert into Puntos(Diamantes, Puntos, Nivel) values(\"{0}\",\"{1}\",\"{2}\")", diamantes, puntos, nivel);
+        comandosDB.CommandText = sqlQuery2;
         comandosDB.ExecuteScalar();
         CerrarDB();
     }
@@ -110,8 +115,7 @@ public class RankingManager : MonoBehaviour {
                 tempPrefab.transform.SetParent(puntosPadre);
                 tempPrefab.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
                 Ranking rankTemp = rankings[i];
-                tempPrefab.GetComponent<RankingScript>().PonerPuntos("#" + (i + 1).ToString(),
-                                                                       rankTemp.Name, rankTemp.Score.ToString());
+                tempPrefab.GetComponent<RankingScript>().PonerPuntos("#" + (i + 1).ToString(), rankTemp.eMail, rankTemp.Score.ToString(), rankTemp.Phone.ToString(), rankTemp.Diamantes.ToString(), rankTemp.Nivel.ToString());
             }
            
         }

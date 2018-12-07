@@ -15,7 +15,7 @@ public class EnemyPatrolScript : MonoBehaviour
     public float tiempoEspera = 4f;         //Segundos que esperara el enemigo antes de dirigirse al siguiente punto de patrullaje
     public float velocidad = 7;             //Velocidad de movimiento del enemigo
     public float anguloDeVision = 100f;     //Angulo de vision conica en la que podra ver al jugador
-     float tiempoDeVision = 0.2f;       //Segundos que transcurren viendo al jugador antes de detectarlo
+     float tiempoDeVision = 0.75f;       //Segundos que transcurren viendo al jugador antes de detectarlo
 
     public int id;                          //ID del enemigo. Se usa para darle alertas de disparo y mantener una lista de enemigos con vida restantes
 
@@ -98,6 +98,7 @@ public class EnemyPatrolScript : MonoBehaviour
         {
             agent.stoppingDistance = 0;                             //Si el raycast golpeo un obstaculo, el enemigo debe moverse hasta el centro del siguiente punto de patrullaje   
             CalcularTiempo(false);
+            aLaVista = false;
         }
     }
 
@@ -173,7 +174,16 @@ public class EnemyPatrolScript : MonoBehaviour
     public void OirDisparo(Vector3 posicion)                        //Metodo publico que se llama cuando se ejecuta un disparo en la escena
     {
         if (!siguiendoJugador)                                      //Si el jugador no esta siguiendo al jugador
-            agent.destination = posicion;                           //Se le indica el origen del disparo como nuevo destino
+        {
+            try
+            {
+                agent.destination = new Vector3(posicion.x, transform.position.y, posicion.z);                           //Se le indica el origen del disparo como nuevo destino
+            }
+            catch
+            {
+                Debug.Log("Error al settear destino de la IA");
+            }
+        }
     }
 
     public void CambiarArma()

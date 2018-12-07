@@ -16,19 +16,13 @@ public class CameraScript : MonoBehaviour
     private float velocityX = 0f;
     private float velocityZ = 0f;
 
+    private bool apuntar = false;
 
     void Start()
     {
         aim = GameObject.Find("Aim").transform;
         player = GameObject.FindGameObjectWithTag("Player").transform;
     }
-
-    /*void Update ()
-    {
-        Vector3 aimTemp = (aim.position - player.position) / 2;
-        aimTemp += new Vector3(0, altura, 0);
-        transform.position = player.position + aimTemp;
-	}*/
 
     private void FixedUpdate()
     {
@@ -41,7 +35,8 @@ public class CameraScript : MonoBehaviour
 
         transform.position = new Vector3(posX, altura, posZ);
 
-        bool apuntar = Input.GetButton("Apuntar");
+        if (Input.GetButtonDown("R3"))
+            apuntar = !apuntar;
 
         if (apuntar)
         {
@@ -53,6 +48,6 @@ public class CameraScript : MonoBehaviour
         }
 
         tiempo = Mathf.Clamp01(tiempo);
-        Camera.main.orthographicSize = Mathf.Lerp(5, 9, tiempo);
+        Camera.main.orthographicSize = Mathf.Lerp(8, 16, tiempo);
     }
 }

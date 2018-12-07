@@ -108,12 +108,12 @@ TextureImporter:
       name: Metralleta_0
       rect:
         serializedVersion: 2
-        x: 1138
-        y: 650
+        x: 1132
+        y: 644
         width: 164
         height: 242
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.4164868, y: 0.5774463}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -125,55 +125,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Metralleta_1
-      rect:
-        serializedVersion: 2
-        x: 1303
-        y: 847
-        width: 7
-        height: 5
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9afbb76562bba384cac6acd0f97ff859
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Metralleta_2
-      rect:
-        serializedVersion: 2
-        x: 1139
-        y: 794
-        width: 6
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7758e18ef329f7f4492cdd1d5e5fe8ab
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Metralleta_3
       rect:
         serializedVersion: 2
-        x: 917
+        x: 919
         y: 385
         width: 141
         height: 240
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.4233139, y: 0.6441694}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -188,12 +148,12 @@ TextureImporter:
       name: Metralleta_4
       rect:
         serializedVersion: 2
-        x: 1140
-        y: 411
+        x: 1143
+        y: 406
         width: 142
         height: 231
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.40862435, y: 0.61858076}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -205,81 +165,21 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Metralleta_5
-      rect:
-        serializedVersion: 2
-        x: 1141
-        y: 563
-        width: 4
-        height: 5
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bb78e5108afb7824992609133a251cb2
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Metralleta_6
-      rect:
-        serializedVersion: 2
-        x: 918
-        y: 553
-        width: 4
-        height: 5
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 160489d50ade9cd4281b486476296e41
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Metralleta_7
       rect:
         serializedVersion: 2
-        x: 917
+        x: 919
         y: 145
         width: 141
         height: 222
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.4079763, y: 0.61039984}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 16c98a9995369e54b9be4b2a5f5a6cf1
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Metralleta_8
-      rect:
-        serializedVersion: 2
-        x: 918
-        y: 295
-        width: 4
-        height: 5
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3912cca552a47b94ab3281409880b364
       vertices: []
       indices: 
       edges: []
@@ -293,7 +193,7 @@ TextureImporter:
         width: 309
         height: 106
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

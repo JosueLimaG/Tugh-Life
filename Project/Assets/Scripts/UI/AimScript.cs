@@ -25,13 +25,15 @@ public class AimScript : MonoBehaviour
 
     private void Update()
     {
-        aim = Input.GetButton("Apuntar");
+        if (Input.GetButtonDown("R3")) 
+            aim = !aim;
+
         float aimX = Mathf.Round(Input.GetAxis("AimX") * 100) / 100;
         float aimY = Mathf.Round(Input.GetAxis("AimY") * 100) / 100;
 
         if (joystick && !aim)
         {
-            if (Mathf.Abs(aimX) > 0.2f && Mathf.Abs(aimY) > 0.2f)
+            if (Mathf.Abs(aimX) > 0f && Mathf.Abs(aimY) > 0f)
             {
                 if (manager.invertirX)
                     mouseX = -aimX * radio;

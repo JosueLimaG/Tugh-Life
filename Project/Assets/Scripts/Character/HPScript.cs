@@ -6,9 +6,6 @@ public class HPScript : MonoBehaviour
 {
     private EnemyPatrolScript enemyScript;
     private MovementScript playerScript;
-    private float initialMovement;
-    private float tiempo;
-    private float velocidad;
     private ParticleSystem myPS;
     private List<ParticleCollisionEvent> particleCollisions = new List<ParticleCollisionEvent>();
     public bool invulnerable = false;
@@ -22,12 +19,10 @@ public class HPScript : MonoBehaviour
         if (gameObject.tag == "Enemigo")
         {
             enemyScript = GetComponent<EnemyPatrolScript>();
-            initialMovement = enemyScript.velocidad;
         }
         else if (gameObject.tag == "Player")
         {
             playerScript = GetComponent<MovementScript>();
-            initialMovement = playerScript.velocidad;
 
             if (GameManager.instance.ps.ObtenerDatos(4, true)[4] == 1)
             {
@@ -36,33 +31,12 @@ public class HPScript : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        //Cuando el personaje reciba un disparo el float velocidad se baja a 0, aca se lo vuelve a subir a su valor maximo en un tiempo determinado.
-        velocidad += Time.deltaTime * 30;
-        velocidad = Mathf.Clamp(velocidad, 0, initialMovement);
-
-        //Se aplica el valor de velocidad al personaje.
-        if (gameObject.tag == "Enemigo")
-        {
-            enemyScript.velocidad = velocidad;
-        }
-        else if (gameObject.tag == "Player")
-        {
-            playerScript.velocidad = velocidad;
-        }
-    }
-
     public void RecibirDano(int x)
     {
         if (!invulnerable)
         {
             hp -= x; //Se le quita a la vida un punto por cada bala recibida.
-            if (hp > 1)
-            {
-                initialMovement -= initialMovement / hp; //Se limita la velocidad del movimiento del personaje dependiendo de su vida restante.
-            }
-            velocidad = 0; //Se baja la velocidad del personaje temporalmente.
+
 
             if (hp <= 0)
             {
@@ -77,6 +51,11 @@ public class HPScript : MonoBehaviour
                     Destroy(gameObject); //Se comprueba la vida del personaje y si no tiene puntos disponibles es eliminado
                 }
             }
+
+            //if (gameObject.tag == "Enemigo")
+            //{
+              //  GetComponent<EnemyPatrolScript>().OirDisparo(GameObject.FindWithTag("Player").transform.position);
+            //}
         }
     }
 

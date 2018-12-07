@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+public enum State { _00Pausa, _01Mision, _02EnJuego, _03Completo, _04Recompensas, _05Derrota }
+
 public class MissionScript : MonoBehaviour
 {
     [Header("Tipo de Mision")]
@@ -23,68 +25,83 @@ public class MissionScript : MonoBehaviour
     [Header("Elementos UI")]
     public GameObject panel;
     public GameObject hud;
+    public GameObject pausa;
     public Text textoMision;
+    public Text objetivo;
 
     [Header("Tipos de Enemigos")]
     public GameObject[] enemigos;
 
-    private GameObject player;
+    [Header("Meta")]
+    public GameObject meta;
 
+    private Transform player;
+    private State estado = State._01Mision;
     private float tiempo;
-    private bool inicio = true;
-    private bool final = false;
-    private bool derrota = false;
+    private string misionTxt;
 
     void Start()
     {
         GameManager.instance.ms = this;
-        player = GameObject.FindWithTag("Player");
-        int x = 1;
-        string temp = "";
-        if (sobrevivirTiempo)
-        {
-            temp += x + ": Sobrevivir " + tiempoASobrevivir + " segundos.\n"; x++;
-            InvokeRepeating("SpawnEnemigo", 5, tiempoEntreSpawnEnemigo);
-        }
-
-        if (eliminarATodos)
-            temp += x + ": Eliminar a todos los enemigos.\n"; x++;
-
-        if (robo)
-            temp += x + ": Robar " + nombreDelItemARobar + ".\n"; x++;
-
-        if (escolta)
-        {
-            temp += x + ": Evitar que muera tu protegido.\n"; x++;
-            temp += x + ": Llega al punto objetivo con el.\n";
-        }
-
-        temp += "\nPresiona DISPARO para continuar.";
-
-        textoMision.text = temp;
-        panel.SetActive(true);
-        hud.SetActive(false);
-        Time.timeScale = 0;
+        player = GameObject.FindWithTag("Player").transform;
+        Mision();
     }
 
     private void Update()
     {
-        if (Input.GetButtonDown("Disparo") && inicio)
-            Empezar();
-
-        if (Input.GetButtonDown("Disparo") && final)
-            SceneManager.LoadScene(0);
-
-        if (derrota)
+        switch(estado)
         {
-            if (Input.GetButtonDown("Disparo"))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-                GameManager.instance.Reset();
-            }
-            if (Input.GetButtonDown("Recargar"))
-                SceneManager.LoadScene(0);
+            case State._00Pausa:
+                if (Input.GetButtonDown("Options"))
+                    Empezar();
+                break;
+
+            case State._01Mision:
+
+                if (Input.GetButtonDown("X"))
+                {
+                    Empezar();
+                    objetivo.gameObject.SetActive(true);
+                }
+
+                break;
+
+            case State._02EnJuego:
+                if (Input.GetButtonDown("Options"))
+                    Pausa();
+                break;
+
+            case State._03Completo:
+                if (Input.GetButtonDown("X"))
+                    SceneManager.LoadScene(0);
+                break;
+
+            case State._04Recompensas:
+                if (Input.GetButtonDown("X"))
+                {
+                    try
+                    {
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                    }
+                    catch
+                    {
+                        SceneManager.LoadScene(0);
+                    }
+                }
+                break;
+
+            case State._05Derrota:
+                if (Input.GetButtonDown("X"))
+                {
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                    GameManager.instance.Reset();
+                }
+
+                if (Input.GetButtonDown("Square"))
+                    SceneManager.LoadScene(0);
+                break;
         }
+
 
         if (sobrevivirTiempo)
         {
@@ -103,33 +120,84 @@ public class MissionScript : MonoBehaviour
         inst.transform.GetChild(2).GetChild(0).position = player.transform.position;
     }
 
+    public void Pausa()
+    {
+        estado = State._00Pausa;
+        Time.timeScale = 0;
+        pausa.SetActive(true);
+    }
+
+    void Mision()
+    {
+        estado = State._01Mision;
+        Time.timeScale = 0;
+
+        int x = 1;
+        misionTxt = "";
+
+        if (sobrevivirTiempo)
+        {
+            misionTxt += x + ": Sobrevivir " + tiempoASobrevivir + " segundos.\n"; x++;
+            InvokeRepeating("SpawnEnemigo", 5, tiempoEntreSpawnEnemigo);
+        }
+
+        if (eliminarATodos)
+            misionTxt += x + ": Eliminar a todos los enemigos.\n"; x++;
+
+        if (robo)
+            misionTxt += x + ": Robar " + nombreDelItemARobar + ".\n"; x++;
+
+        if (escolta)
+        {
+            misionTxt += x + ": Evitar que muera tu protegido.\n"; x++;
+            misionTxt += x + ": Llega al punto objetivo con el.\n";
+        }
+
+        objetivo.text = misionTxt;
+        objetivo.gameObject.SetActive(false);
+        textoMision.text = misionTxt + "\nPresiona X para continuar.";
+        panel.SetActive(true);
+        pausa.SetActive(false);
+        hud.SetActive(false);
+        meta.SetActive(false);
+    }
+
+    public void Empezar()
+    {
+        estado = State._02EnJuego;
+        panel.SetActive(false);
+        hud.SetActive(true);
+        pausa.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+
     public void Victoria()
     {
+        estado = State._03Completo;
+        meta.SetActive(true);
+    }
+
+    public void Recompensa()
+    {
+        estado = State._04Recompensas;
         textoMision.text = "Felicidades!\nObtuviste:\nDinero: " + dinero + "\nPuntos de experiencia: " + experiencia;
         int pistola = player.transform.GetChild(0).GetComponent<Inventario>().balasPistola;
         int metralleta = player.transform.GetChild(0).GetComponent<Inventario>().balasMetralleta;
         int escopeta = player.transform.GetChild(0).GetComponent<Inventario>().balasEscopeta;
-        GameManager.instance.ps.SaveMissionResults(dinero, experiencia,pistola, metralleta, escopeta);
+        GameManager.instance.ps.SaveMissionResults(dinero, experiencia, pistola, metralleta, escopeta);
         panel.SetActive(true);
         hud.SetActive(false);
-        final = true;
         Time.timeScale = 0;
     }
 
     public void Derrota()
     {
-        derrota = true;
-        textoMision.text = "Fallaste\n\nPresiona DISPARO para reintentar\n\nPresiona RECARGAR para ir al menu.";
+        estado = State._05Derrota;
+        textoMision.text = "Fallaste\n\nPresiona X para reintentar\n\nPresiona CUADRADO para ir al menu.";
         panel.SetActive(true);
         hud.SetActive(false);
         Time.timeScale = 0;
     }
 
-    public void Empezar()
-    {
-        panel.SetActive(false);
-        hud.SetActive(true);
-        inicio = false;
-        Time.timeScale = 1;
-    }
 }

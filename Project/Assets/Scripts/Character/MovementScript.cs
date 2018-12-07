@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class MovementScript : MonoBehaviour
 {
-    [HideInInspector] public float velocidad = 7f; //Se oculta la velocidad para evitar su manipulado libre, sin evitar su acceso a otros scripts
     [HideInInspector] public float angulo;
     [HideInInspector] public Transform aim;
 
+    private float velocidad = 12;
     private Rigidbody rb;
     private Inventario inventario;
     private GameObject armaCerca;
@@ -30,13 +30,13 @@ public class MovementScript : MonoBehaviour
         //Calculando la rotacion para mirar siempre al cursor
         MirarAlCursor();
 
-        if (Input.GetButtonDown("Cambiar"))
+        if (Input.GetButtonDown("Triangle"))
         {
             inventario.CambiarArma();
             MostrarInvetario();
         }
 
-        if (Input.GetButtonDown("Descartar"))
+        if (Input.GetButtonDown("X"))
         {
             inventario.NuevaArma();
             MostrarInvetario();
@@ -57,10 +57,10 @@ public class MovementScript : MonoBehaviour
 
     void MovimientoPersonaje()
     {
-        float inputX = Mathf.Round(Input.GetAxisRaw("Horizontal") * 100) / 100;
-        float inputZ = Mathf.Round(Input.GetAxisRaw("Vertical") * 100) / 100;
+        float inputX = Mathf.Round(Input.GetAxisRaw("Horizontal") * 10) / 10;
+        float inputZ = Mathf.Round(Input.GetAxisRaw("Vertical") * 10) / 10;
 
-        rb.velocity = new Vector3(inputX, 0, inputZ) * velocidad;
+        rb.velocity = new Vector3(inputX * velocidad, 0, inputZ * velocidad);
     }
 
     void MirarAlCursor()

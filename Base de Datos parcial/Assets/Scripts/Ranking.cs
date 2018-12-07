@@ -6,16 +6,22 @@ using System.Text;
 class Ranking : IComparable<Ranking>
 {
     public int Id { get; set; }
-    public string Name { get; set; }
+    public string eMail { get; set; }
     public int Score { get; set; }
     public DateTime Date { get; set; }
+    public int Phone { get; set; }
+    public int Diamantes { get; set; }
+    public int Nivel { get; set; }
 
-    public Ranking(int id, string name, int score, DateTime date)
+    public Ranking(int id, string eMail, int score, DateTime date, int Phone, int diamantes, int nivel)
     {
         this.Id = id;
-        this.Name = name;
+        this.eMail = eMail;
         this.Score = score;
         this.Date = date;
+        this.Phone = Phone;
+        this.Diamantes = diamantes;
+        this.Nivel = nivel;
     }
 
     public int CompareTo(Ranking other)

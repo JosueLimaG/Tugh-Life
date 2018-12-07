@@ -11,12 +11,17 @@ public class MenuScript : MonoBehaviour
     public Image arma1;
     public Image arma2;
     public Image personaje;
+    public Image armaSeleccionada;
+    public Text TituloPrincipal;
     public Text[] titulos = new Text[5];
     public Text[] valores = new Text[5];
     public Text recursos;
     public Text mensaje;
+    public Text armaSeleccionadaTxt;
     public EventSystem eventSystem;
     public Button scene;
+    public GameObject informacionMejoras;
+    public GameObject informacionArmas;
 
     [Header("Sprites de armas")]
     public Sprite desarmado;
@@ -89,6 +94,8 @@ public class MenuScript : MonoBehaviour
             }
         }
 
+        informacionArmas.SetActive(true);
+        informacionMejoras.SetActive(false);
         CambiodeSlot(0, false);
         CambioArma(3, false);
         ActualizarRecursos(false, 0);
@@ -96,14 +103,32 @@ public class MenuScript : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("R2"))
-            CambioArma(1, true);
-        if (Input.GetButtonDown("L2"))
-            CambioArma(-1, true);
         if (Input.GetButtonDown("R1"))
-            CambiodeSlot(1, true);
+            CambioArma(1, true);
         if (Input.GetButtonDown("L1"))
+            CambioArma(-1, true);
+
+        if (Input.GetButtonDown("Triangle"))
+            CambiodeSlot(1, true);
+        if (Input.GetButtonDown("Circle") && !informacionMejoras.activeSelf)
             CambiodeSlot(-1, true);
+
+        if (Input.GetButtonDown("X") && mainSlot == 2)
+            StartGame();
+
+        if (Input.GetButtonDown("X") && !informacionMejoras.activeSelf)
+            CambiodeSlot(1, true);
+
+        if (Input.GetButtonDown("Circle") && informacionMejoras.activeSelf)
+            MostrarMejoras();
+
+        if (Input.GetButtonDown("Square") && mainSlot != 2)
+            MostrarMejoras();
+
+        if (Input.GetButtonDown("Options") && mainSlot != 2)
+            CambiodeSlot(1, true);
+        else if (Input.GetButtonDown("Options"))
+            StartGame();
     }
 
     public void CambioArma(int x)
@@ -133,15 +158,6 @@ public class MenuScript : MonoBehaviour
             slotArma = x;
 
         MostrarInfo();
-
-        try
-        {
-            if (!eventSystem.alreadySelecting)
-                eventSystem.SetSelectedGameObject(GameObject.Find("Start"));
-        }
-        catch
-        {
-        }
     }
 
     public void CambiodeSlot(int x)
@@ -160,9 +176,9 @@ public class MenuScript : MonoBehaviour
             mainSlot = x;
 
         if (mainSlot > 2)
-            mainSlot = 0;
-        else if (mainSlot < 0)
             mainSlot = 2;
+        else if (mainSlot < 0)
+            mainSlot = 0;
 
         if (mainSlot == 2)
         {
@@ -199,18 +215,28 @@ public class MenuScript : MonoBehaviour
         switch (mainSlot)
         {
             case 0:
+                informacionMejoras.SetActive(false);
+                informacionArmas.SetActive(true);
+                TituloPrincipal.text = "Arma principal";
                 arma1.color = active;
                 arma2.color = inactive;
                 personaje.color = inactive;
+
                 break;
             case 1:
-                arma1.color = inactive;
+                informacionMejoras.SetActive(false);
+                informacionArmas.SetActive(true);
+                TituloPrincipal.text = "Arma secundaria";
+                arma1.color = active;
                 arma2.color = active;
                 personaje.color = inactive;
                 break;
             case 2:
-                arma1.color = inactive;
-                arma2.color = inactive;
+                informacionMejoras.SetActive(true);
+                informacionArmas.SetActive(false);
+                TituloPrincipal.text = "Inventario";
+                arma1.color = active;
+                arma2.color = active;
                 personaje.color = active;
                 break;
         }
@@ -264,7 +290,7 @@ public class MenuScript : MonoBehaviour
                                     puntos[arma, columna] += 2 * positivo;
                                     break;
                                 case 1:
-                                    puntos[arma, columna] += 3 * positivo;
+                                    puntos[arma, columna] += 5 * positivo;
                                     break;
                                 case 2:
                                     puntos[arma, columna] += 1 * positivo;
@@ -288,13 +314,13 @@ public class MenuScript : MonoBehaviour
                             switch (arma)
                             {
                                 case 0:
-                                    puntos[arma, columna] -= 0.2f * positivo;
+                                    puntos[arma, columna] -= 0.3f * positivo;
                                     break;
                                 case 1:
-                                    puntos[arma, columna] -= 0.2f * positivo;
+                                    puntos[arma, columna] -= 0.4f * positivo;
                                     break;
                                 case 2:
-                                    puntos[arma, columna] -= 0.2f * positivo;
+                                    puntos[arma, columna] -= 0.3f * positivo;
                                     break;
                             }
 
@@ -342,10 +368,10 @@ public class MenuScript : MonoBehaviour
                             switch (arma)
                             {
                                 case 0:
-                                    puntos[arma, columna] += 5f * positivo;
+                                    puntos[arma, columna] += 7f * positivo;
                                     break;
                                 case 1:
-                                    puntos[arma, columna] += 3f * positivo;
+                                    puntos[arma, columna] += 5f * positivo;
                                     break;
                                 case 2:
                                     puntos[arma, columna] += 1f * positivo;
@@ -362,17 +388,17 @@ public class MenuScript : MonoBehaviour
                     }
                     break;
                 case 4:
-                    if ((puntos[arma, columna] == 0 && dinero >= 500) || puntos[arma,columna] == 1)
+                    if ((puntos[arma, columna] == 0 && dinero >= 1000) || puntos[arma,columna] == 1)
                     {
                         if (puntos[arma, columna] == 1)
                         {
                             puntos[arma, columna] = 0;
-                            ActualizarRecursos(true, -500);
+                            ActualizarRecursos(true, -1000);
                         }
                         else
                         {
                             puntos[arma, columna] = 1;
-                            ActualizarRecursos(true, 500);
+                            ActualizarRecursos(true, 1000);
                         }
                     }
                     break;
@@ -380,42 +406,39 @@ public class MenuScript : MonoBehaviour
         }
         else
         {
-            if ((mejorasDisp[arma, columna] < 20 && positivo == 1) || (mejorasDisp[arma, columna] > 0 && positivo == -1))
+            if ((positivo == 1 && dinero >= 75) || (positivo == -1 && puntos[arma, columna] > 16))
             {
-                if ((positivo == 1 && dinero >= 75) || positivo == -1)
+                switch (columna)
                 {
-                    switch (columna)
-                    {
-                        case 1:
-                            puntos[arma, columna] += 2 * positivo;
-                            ActualizarRecursos(true, 75 * positivo);
-                            break;
-                        case 2:
-                            puntos[arma, columna] += 16 * positivo;
-                            ActualizarRecursos(true, 75 * positivo);
-                            break;
-                        case 3:
-                            puntos[arma, columna] += 6 * positivo;
-                            ActualizarRecursos(true, 75 * positivo);
-                            break;
-                        case 4:
-                            if ((puntos[arma, columna] == 0 && dinero >= 500) || puntos[arma, columna] == 1)
+                    case 1:
+                        puntos[arma, columna] += 2 * positivo;
+                        ActualizarRecursos(true, 75 * positivo);
+                        break;
+                    case 2:
+                        puntos[arma, columna] += 16 * positivo;
+                        ActualizarRecursos(true, 75 * positivo);
+                        break;
+                    case 3:
+                        puntos[arma, columna] += 6 * positivo;
+                        ActualizarRecursos(true, 75 * positivo);
+                        break;
+                    case 4:
+                        if ((puntos[arma, columna] == 0 && dinero >= 400) || puntos[arma, columna] == 1)
+                        {
+                            if (puntos[arma, columna] == 1)
                             {
-                                if (puntos[arma, columna] == 1)
-                                {
-                                    puntos[arma, columna] = 0;
-                                    ActualizarRecursos(true, -400);
-                                }
-                                else
-                                {
-                                    puntos[arma, columna] = 1;
-                                    ActualizarRecursos(true, 400);
-                                }
+                                puntos[arma, columna] = 0;
+                                ActualizarRecursos(true, -400);
                             }
-                            break;
-                    }
-                    mejorasDisp[arma, columna] += positivo;
+                            else
+                            {
+                                puntos[arma, columna] = 1;
+                                ActualizarRecursos(true, 400);
+                            }
+                        }
+                        break;
                 }
+                mejorasDisp[arma, columna] += positivo;
             }
         }
 
@@ -430,6 +453,17 @@ public class MenuScript : MonoBehaviour
             experiencia -= valor;
 
         recursos.text = string.Format("Dinero disponible: {0} bs.\nPuntos XP : {1}", dinero, experiencia);
+    }
+
+    public void MostrarMejoras()
+    {
+        informacionMejoras.SetActive(!informacionMejoras.activeSelf);
+        informacionArmas.SetActive(!informacionArmas.activeSelf);
+
+        if(informacionMejoras.activeSelf)
+        {
+            eventSystem.SetSelectedGameObject(GameObject.Find("SubMain"));
+        }
     }
 
     void MostrarInfo()
@@ -517,20 +551,27 @@ public class MenuScript : MonoBehaviour
                 {
                     case 3:
                         temp.sprite = palo;
+                        armaSeleccionadaTxt.text = "Palo";
                         break;
                     case 4:
                         temp.sprite = cuchillo;
+                        armaSeleccionadaTxt.text = "Cuchillo";
                         break;
                     case 0:
                         temp.sprite = pistola;
+                        armaSeleccionadaTxt.text = "Pistola";
                         break;
                     case 1:
                         temp.sprite = metralleta;
+                        armaSeleccionadaTxt.text = "Metralleta";
                         break;
                     case 2:
                         temp.sprite = escopeta;
+                        armaSeleccionadaTxt.text = "Escopeta";
                         break;
                 }
+
+                armaSeleccionada.sprite = temp.sprite;
             }
         }
     }
@@ -553,7 +594,7 @@ public class MenuScript : MonoBehaviour
     {
         int x = int.Parse(scene.GetComponentInChildren<Text>().text);
         x++;
-        if (x > 2)
+        if (x > 3)
             x = 1;
         scene.GetComponentInChildren<Text>().text = x.ToString();
     }
@@ -614,8 +655,8 @@ public class MenuScript : MonoBehaviour
         else
             infArma1 = "Cuchillo";
 
-        GameManager.instance.ps.arma1 = infArma1;
-        GameManager.instance.ps.arma2 = infArma2;
+        GameManager.instance.ps.arma1 = infArma2;
+        GameManager.instance.ps.arma2 = infArma1;
 
         GameManager.instance.ps.GuardarDinero(dinero);
         GameManager.instance.ps.GuardarXP(experiencia);
