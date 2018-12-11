@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     public Image _02Arma;
     public Text _02Info;
     private bool _antibalas;
+    public Image armaPiso;
+    public Image herido;
     
     //Sprites usados para mostrar las diferentes armas en el inventario
     [Header("Sprites Armas")]
@@ -25,8 +27,20 @@ public class UIManager : MonoBehaviour
     public Sprite metralleta;
     public Sprite antibalas;
 
+    [Header("Sprites a recoger")]
+    public Sprite desarmadoPiso;
+    public Sprite paloPiso;
+    public Sprite cuchilloPiso;
+    public Sprite pistolaPiso;
+    public Sprite escopetaPiso;
+    public Sprite metralletaPiso;
+
     private Image red;              //Imagen que muestra el dano recibido por el jugador.
     private Inventario jugador;     //Script inventario
+    private float heridoTime;
+    private float min = 0;
+    private float max = 1;
+    private SpriteRenderer armaPisoW;
 
     void Awake()
     {
@@ -45,8 +59,35 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        armaPisoW = GameObject.Find("RecogerUI").GetComponent<SpriteRenderer>();
+        if (GameManager.instance.windows == true)
+            armaPisoW.gameObject.SetActive(false);
         Invoke("ActualizarInformacion", 0.5f);                  //Se llama al metodo de Actualizar Informacion con un tiempo de retraso para evitar errores.
     }                                                           //De otro modo aun no se armo la estructura solicitada y no hay informacion suficiente
+
+    private void Update()
+    {
+        ActualizarArmaPiso();
+
+        HP();
+    }
+
+    void HP()
+    {
+        heridoTime -= Time.deltaTime * 5;
+        heridoTime = Mathf.Clamp(heridoTime, min, max);
+
+        float value = heridoTime / max;
+        herido.color = new Color(1, 1, 1, value);
+    }
+
+    public void RecibirDano(float hpActual, float hpMax)
+    {
+        min = hpActual;
+        max = hpMax;
+
+        heridoTime = max;
+    }
 
     public void ActualizarInventario()
     {
@@ -112,6 +153,49 @@ public class UIManager : MonoBehaviour
 
         _02Info.text = municionActual[0].ToString() + "/" + municionMaxima[0].ToString() + "  -  " + municionGuardada[0].ToString();
         _01Info.text = municionActual[1].ToString() + "/" + municionMaxima[1].ToString() + "  -  " + municionGuardada[1].ToString();
+    }
+
+    void ActualizarArmaPiso()
+    {
+        try
+        {
+            switch (jugador.armaPiso.GetComponent<Armas>().Nombre())
+            {
+                case "Desarmado":
+                    armaPisoW.sprite = null;
+                    armaPiso.sprite = desarmadoPiso;
+                    break;
+                case "Palo":
+                    armaPisoW.sprite = paloPiso;
+                    armaPiso.sprite = paloPiso;
+                    break;
+                case "Cuchillo":
+                    armaPisoW.sprite = cuchilloPiso;
+                    armaPiso.sprite = cuchilloPiso;
+                    break;
+                case "Pistola":
+                    armaPisoW.sprite = pistolaPiso;
+                    armaPiso.sprite = pistolaPiso;
+                    break;
+                case "Metralleta":
+                    armaPisoW.sprite = metralletaPiso;
+                    armaPiso.sprite = metralletaPiso;
+                    break;
+                case "Escopeta":
+                    armaPisoW.sprite = escopetaPiso;
+                    armaPiso.sprite = escopetaPiso;
+                    break;
+                default:
+                    armaPisoW.sprite = null;
+                    armaPiso.sprite = desarmadoPiso;
+                    break;
+            }
+        }
+        catch
+        {
+            armaPisoW.sprite = null;
+            armaPiso.sprite = desarmadoPiso;
+        }
     }
 }
 

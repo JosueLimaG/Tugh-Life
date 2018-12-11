@@ -7,19 +7,17 @@ public enum Conductas { agresivo, precavido, tranquilo };
 
 public class EnemyPatrolScript : MonoBehaviour
 {
-    [Header("Puntos de patrullaje")]
-    public Transform[] puntos;              //Coleccion de puntos para realizar la patrulla del NavMesh Agent
 
     [Header("Configuracion")]
     public float maxRange = 50;             //Rango de vision del enemigo
     public float tiempoEspera = 4f;         //Segundos que esperara el enemigo antes de dirigirse al siguiente punto de patrullaje
     public float velocidad = 7;             //Velocidad de movimiento del enemigo
-    public float anguloDeVision = 100f;     //Angulo de vision conica en la que podra ver al jugador
-     float tiempoDeVision = 0.75f;       //Segundos que transcurren viendo al jugador antes de detectarlo
+    public float anguloDeVision = 120f;     //Angulo de vision conica en la que podra ver al jugador
+    float tiempoDeVision = 0.6f;           //Segundos que transcurren viendo al jugador antes de detectarlo
 
-    public int id;                          //ID del enemigo. Se usa para darle alertas de disparo y mantener una lista de enemigos con vida restantes
+    [HideInInspector] public int id;                          //ID del enemigo. Se usa para darle alertas de disparo y mantener una lista de enemigos con vida restantes
 
-    private int destino = 0;                //Se usa para saber a cual punto[] debe ir a continuacion
+    public int destino = 1;                //Se usa para saber a cual punto[] debe ir a continuacion
     private int distanciaDeTiro;            //Se usa para indicar al enemigo a que distancia debe usar su arma actual
     private bool esperando = false;         //El enemigo esta esperando a que se le asigne el siguiente punto de patrullaje?
     private bool siguiendoJugador = false;  //El enemigo vio al jugador y lo esta siguiendo?
@@ -28,6 +26,7 @@ public class EnemyPatrolScript : MonoBehaviour
     private Inventario inventario;          //Usado para disparar/recargar
     private Transform player;               //Ubicacion del jugador
     private Transform playerTemp;           //Cuando el enemigo ve al jugador, crea una ubicacion temporal con su ultima posicion detectada. 
+    public Transform[] puntos;              //Coleccion de puntos para realizar la patrulla del NavMesh Agent
     private RaycastHit hit;                 //El hit del raycast usado para comprobar si hay algun objeto entre el jugador y el enemigo
     private Ray ray;                        //Rayo del raycast
     private Armas arma;                     //Usado para obtener el arma actual
@@ -38,11 +37,13 @@ public class EnemyPatrolScript : MonoBehaviour
 
     void Start()
     {
+        tiempoEspera = Random.Range(tiempoEspera - 1, tiempoEspera + 1);
         id = GameManager.instance.NuevoEnemigo(gameObject);             //Se obtiene un ID unico de forma automatica
         player = GameObject.FindGameObjectWithTag("Player").transform;  //Ubicacion del jugador
-        agent = GetComponent<NavMeshAgent>();  
+        agent = GetComponent<NavMeshAgent>();
         inventario = transform.GetChild(0).GetComponent<Inventario>();
         Invoke("ComprobaArma", 0.1f);                                   //Se comprueba el arma activa
+        puntos = transform.parent.GetChild(2).GetComponentsInChildren<Transform>();
         SiguientePunto();                                               //Se le asigna el primer punto de patrullaje
     }
 
@@ -168,7 +169,10 @@ public class EnemyPatrolScript : MonoBehaviour
     {
         esperando = false;                                          //Cuando se le asigna al enemigo un nuevo punto, deja de estar en espera
         agent.destination = puntos[destino].position;               //Se le asigna como destino el siguiente punto
-        destino = (destino + 1) % puntos.Length;                    //El siguiente punto se calcula a partir de una suma +1 al indice del anterior valor
+        destino++;                                                  //El siguiente punto se calcula a partir de una suma +1 al indice del anterior valor
+        if (destino >= puntos.Length)
+            destino = 1;
+        tiempoDeVision = 0.6f;
     }
 
     public void OirDisparo(Vector3 posicion)                        //Metodo publico que se llama cuando se ejecuta un disparo en la escena
@@ -184,6 +188,7 @@ public class EnemyPatrolScript : MonoBehaviour
                 Debug.Log("Error al settear destino de la IA");
             }
         }
+        tiempoDeVision = 0.1f;
     }
 
     public void CambiarArma()

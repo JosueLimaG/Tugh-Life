@@ -14,7 +14,6 @@ public class Inventario : MonoBehaviour
     public GameObject escopetaPrefab;
 
     GameObject[] contenido = new GameObject[2];
-    private GameObject armaPiso;
     private GameObject armaTemp;
     private GameObject armaTemp2;
     private bool antibalas = false;
@@ -24,6 +23,7 @@ public class Inventario : MonoBehaviour
     [HideInInspector] public int balasPistola;
     [HideInInspector] public int balasEscopeta;
     [HideInInspector] public int balasMetralleta;
+    [HideInInspector] public GameObject armaPiso;
     [HideInInspector] public GameObject activa;
 
     private void Start()
@@ -144,6 +144,23 @@ public class Inventario : MonoBehaviour
         activa.SetActive(true);
     }
 
+    public void CambiarArma(int x)
+    {
+        if (x == 0 && activa == contenido[1])
+        {
+            activa = contenido[0];
+            contenido[1].SetActive(false);
+        }
+
+        if (x == 1 && activa == contenido[0])
+        {
+            activa = contenido[1];
+            contenido[0].SetActive(false);
+        }
+
+        activa.SetActive(true);
+    }
+
 
     //Metodo para intercambiar un arma del inventario con otra. Cuando no haya otra arma disponible cerca se deshechara la que se tiene como activa.
     public void NuevaArma()
@@ -228,16 +245,12 @@ public class Inventario : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Arma")
-        {
             armaPiso = null;
-        }
     }
 
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Arma")
-        {
             armaPiso = other.gameObject;
-        }
     }
 }

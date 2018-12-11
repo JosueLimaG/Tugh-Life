@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 public abstract class Armas : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public abstract class Armas : MonoBehaviour
 
     private bool player = false;                            //El arma esta en el inventario del jugador?
     private bool disparo;                                   //Se esta presionando el boton disparo?
+    private bool disparo2;
     private float timer = 0f;                               //Contador utilizado para limitar el disparo
     private Coroutine cargar;                               //Se asigna la corrutina a una variable para poder ser cancelada en caso de cambiar el arma 
 
@@ -68,17 +70,18 @@ public abstract class Armas : MonoBehaviour
             timer = Mathf.Clamp(timer, 0, CadenciaDeTiro() + 0.1f);
             if (transform.parent.parent.tag == "Player")
             {
-                disparo = Input.GetButton("R2");
+                disparo = CrossPlatformInputManager.GetButton("R2");
+                disparo2 = CrossPlatformInputManager.GetButton("L2");
 
-                if (disparo)
+                if (disparo || disparo2)
                 {
                     Disparar();
                 }
 
-                // if (Input.GetButtonDown("Descartar"))
+                // if (CrossPlatformInputManager.GetButtonDown("Descartar"))
                 //Descartar();
 
-                if (Input.GetButtonDown("Square"))
+                if (CrossPlatformInputManager.GetButtonDown("Square"))
                     RecargarArma();
             }
         }

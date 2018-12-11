@@ -13,6 +13,8 @@ public class HPScript : MonoBehaviour
     [Header("Vida del personaje")]
     public int hp = 5;
 
+    private int maxHp;
+
     private void Start()
     {
         //Dependiendo si el personaje es enemigo o controlado por el jugador se obtiene la velocidad de movimiento por sus scripts correspondientes.
@@ -28,6 +30,8 @@ public class HPScript : MonoBehaviour
             {
                 hp *= 2;
             }
+
+            maxHp = hp;
         }
     }
 
@@ -52,9 +56,12 @@ public class HPScript : MonoBehaviour
                 }
             }
 
+            if (tag == "Player")
+                UIManager.instance.RecibirDano(hp, maxHp);
+
             //if (gameObject.tag == "Enemigo")
             //{
-              //  GetComponent<EnemyPatrolScript>().OirDisparo(GameObject.FindWithTag("Player").transform.position);
+            //  GetComponent<EnemyPatrolScript>().OirDisparo(GameObject.FindWithTag("Player").transform.position);
             //}
         }
     }

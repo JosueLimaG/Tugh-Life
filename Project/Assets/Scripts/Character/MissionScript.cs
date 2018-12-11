@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using UnityStandardAssets.CrossPlatformInput;
 
 public enum State { _00Pausa, _01Mision, _02EnJuego, _03Completo, _04Recompensas, _05Derrota }
 
@@ -17,6 +19,7 @@ public class MissionScript : MonoBehaviour
     public bool robo;
     public string nombreDelItemARobar;
     public bool escolta;
+    public bool sigilo;
 
     [Header("Recompensas de Mision")]
     public int dinero;
@@ -26,6 +29,9 @@ public class MissionScript : MonoBehaviour
     public GameObject panel;
     public GameObject hud;
     public GameObject pausa;
+    public GameObject pausa_Button;
+    public GameObject reintentar;
+    public GameObject reintentar_button;
     public Text textoMision;
     public Text objetivo;
 
@@ -39,9 +45,11 @@ public class MissionScript : MonoBehaviour
     private State estado = State._01Mision;
     private float tiempo;
     private string misionTxt;
+    private EventSystem eventSystem;
 
     void Start()
     {
+        eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         GameManager.instance.ms = this;
         player = GameObject.FindWithTag("Player").transform;
         Mision();
@@ -52,13 +60,15 @@ public class MissionScript : MonoBehaviour
         switch(estado)
         {
             case State._00Pausa:
-                if (Input.GetButtonDown("Options"))
+                if (CrossPlatformInputManager.GetButtonDown("Options"))
                     Empezar();
+                if (CrossPlatformInputManager.GetButtonDown("X"))
+                    Menu();
                 break;
 
             case State._01Mision:
-
-                if (Input.GetButtonDown("X"))
+                if(Input.anyKeyDown || Input.touchCount > 0)
+                //if (CrossPlatformInputManager.GetButtonDown("X"))
                 {
                     Empezar();
                     objetivo.gameObject.SetActive(true);
@@ -67,17 +77,18 @@ public class MissionScript : MonoBehaviour
                 break;
 
             case State._02EnJuego:
-                if (Input.GetButtonDown("Options"))
+                if (CrossPlatformInputManager.GetButtonDown("Options"))
                     Pausa();
                 break;
 
             case State._03Completo:
-                if (Input.GetButtonDown("X"))
-                    SceneManager.LoadScene(0);
+                //if (CrossPlatformInputManager.GetButtonDown("X"))
+                    //SceneManager.LoadScene(0);
                 break;
 
             case State._04Recompensas:
-                if (Input.GetButtonDown("X"))
+                if (Input.anyKeyDown || Input.touchCount > 0)
+                //if (CrossPlatformInputManager.GetButtonDown("X"))
                 {
                     try
                     {
@@ -85,36 +96,36 @@ public class MissionScript : MonoBehaviour
                     }
                     catch
                     {
-                        SceneManager.LoadScene(0);
+                        Menu();
                     }
                 }
                 break;
 
             case State._05Derrota:
-                if (Input.GetButtonDown("X"))
-                {
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-                    GameManager.instance.Reset();
-                }
-
-                if (Input.GetButtonDown("Square"))
-                    SceneManager.LoadScene(0);
                 break;
         }
 
 
-        if (sobrevivirTiempo)
+        if (sobrevivirTiempo && estado == State._02EnJuego)
         {
             tiempo += Time.deltaTime;
+
+            objetivo.text = "Sobrevivir " + (Mathf.Round((tiempoASobrevivir - tiempo) * 10) / 10).ToString() + " segundos.";
             if (tiempo > tiempoASobrevivir)
                 Victoria();
         }
     }
 
+    public void Reintentar()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        GameManager.instance.Reset();
+    }
+
     void SpawnEnemigo()
     {
-        int x = Random.Range(0, puntoDeSpawnEnemigo.Length - 1);
-        int y = Random.Range(0, enemigos.Length - 1);
+        int x = Random.Range(0, puntoDeSpawnEnemigo.Length);
+        int y = Random.Range(0, enemigos.Length);
 
         GameObject inst = Instantiate(enemigos[y], puntoDeSpawnEnemigo[x].position, Quaternion.identity);
         inst.transform.GetChild(2).GetChild(0).position = player.transform.position;
@@ -125,13 +136,20 @@ public class MissionScript : MonoBehaviour
         estado = State._00Pausa;
         Time.timeScale = 0;
         pausa.SetActive(true);
+        reintentar.SetActive(false);
+        eventSystem.SetSelectedGameObject(GameObject.Find("APausa"));
+    }
+
+    public void ArmaButton(int x)
+    {
+        player.GetComponent<MovementScript>().CambiarArma(x);
+        print(x);
     }
 
     void Mision()
     {
         estado = State._01Mision;
         Time.timeScale = 0;
-
         int x = 1;
         misionTxt = "";
 
@@ -153,13 +171,19 @@ public class MissionScript : MonoBehaviour
             misionTxt += x + ": Llega al punto objetivo con el.\n";
         }
 
+        if (sigilo) 
+        {
+            misionTxt += x + ": Evita ser detectado.\n"; x++;
+        }
+
+        textoMision.text = misionTxt;
         objetivo.text = misionTxt;
         objetivo.gameObject.SetActive(false);
-        textoMision.text = misionTxt + "\nPresiona X para continuar.";
         panel.SetActive(true);
         pausa.SetActive(false);
         hud.SetActive(false);
         meta.SetActive(false);
+        reintentar.SetActive(false);
     }
 
     public void Empezar()
@@ -168,7 +192,13 @@ public class MissionScript : MonoBehaviour
         panel.SetActive(false);
         hud.SetActive(true);
         pausa.SetActive(false);
+        reintentar.SetActive(false);
         Time.timeScale = 1;
+    }
+
+    public void Menu()
+    {
+        SceneManager.LoadScene(0);
     }
 
 
@@ -176,6 +206,7 @@ public class MissionScript : MonoBehaviour
     {
         estado = State._03Completo;
         meta.SetActive(true);
+        reintentar.SetActive(false);
     }
 
     public void Recompensa()
@@ -188,16 +219,19 @@ public class MissionScript : MonoBehaviour
         GameManager.instance.ps.SaveMissionResults(dinero, experiencia, pistola, metralleta, escopeta);
         panel.SetActive(true);
         hud.SetActive(false);
+        reintentar.SetActive(false);
         Time.timeScale = 0;
     }
 
     public void Derrota()
     {
         estado = State._05Derrota;
-        textoMision.text = "Fallaste\n\nPresiona X para reintentar\n\nPresiona CUADRADO para ir al menu.";
-        panel.SetActive(true);
+        panel.SetActive(false);
         hud.SetActive(false);
+        reintentar.SetActive(true);
+        eventSystem.SetSelectedGameObject(reintentar_button);
         Time.timeScale = 0;
+        eventSystem.SetSelectedGameObject(GameObject.Find("ADerrota"));
     }
 
 }

@@ -123,8 +123,8 @@ TextureImporter:
       name: Bataso_0
       rect:
         serializedVersion: 2
-        x: 1540
-        y: 447
+        x: 1539
+        y: 445
         width: 268
         height: 246
       alignment: 9
@@ -140,31 +140,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bataso_1
-      rect:
-        serializedVersion: 2
-        x: 1802
-        y: 531
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1264d1ea69f6aed4c84df7907cce1a71
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Bataso_2
       rect:
         serializedVersion: 2
-        x: 2231
-        y: 447
+        x: 2232
+        y: 446
         width: 263
         height: 246
       alignment: 9
@@ -180,111 +160,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bataso_3
-      rect:
-        serializedVersion: 2
-        x: 2490
-        y: 531
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f3cc806553a7d3a42883ea577b4cabfa
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bataso_4
-      rect:
-        serializedVersion: 2
-        x: 1804
-        y: 453
-        width: 4
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0c5125b77fa848f438917bf3f6ec918c
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bataso_5
-      rect:
-        serializedVersion: 2
-        x: 2492
-        y: 453
-        width: 4
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ec4ca2d44d527a14fbdc64b36fdc4920
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bataso_6
-      rect:
-        serializedVersion: 2
-        x: 1792
-        y: 437
-        width: 6
-        height: 12
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b240cb139e571484884b5571a44c15c2
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bataso_7
-      rect:
-        serializedVersion: 2
-        x: 2480
-        y: 437
-        width: 6
-        height: 12
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5c00b10b32de56640ace40891d0528bd
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Bataso_8
       rect:
         serializedVersion: 2
-        x: 1642
-        y: 160
+        x: 1641
+        y: 158
         width: 170
         height: 261
       alignment: 9
@@ -295,26 +175,6 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 07d34af70af01fc4d93ac98e62338cf4
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bataso_9
-      rect:
-        serializedVersion: 2
-        x: 1720
-        y: 415
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1bd27af683cc9aa48ab77a220d8ec41b
       vertices: []
       indices: 
       edges: []
@@ -335,66 +195,6 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 90f61b23d82fcb440824f3bae6fef4eb
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bataso_11
-      rect:
-        serializedVersion: 2
-        x: 2408
-        y: 415
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3bbf35cfdd18cfe4f8bd1eb45c7e9d55
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bataso_12
-      rect:
-        serializedVersion: 2
-        x: 1814
-        y: 405
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 11def080cd4c51d4683614540f15fb28
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bataso_13
-      rect:
-        serializedVersion: 2
-        x: 2496
-        y: 405
-        width: 12
-        height: 6
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 48eba443fb248a24b9d30e934a1815d3
       vertices: []
       indices: 
       edges: []

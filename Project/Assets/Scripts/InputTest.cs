@@ -1,73 +1,58 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class InputTest : MonoBehaviour
 {
-    Transform player;
-    public float anguloDeVision = 70;
-    public bool enVista = false;
-    public float timepoDeVision = 5;
-    float tiempo;
-
+    public Text system;
+    public Text input;
+    public Text axis;
+    public Text buttons;
+   
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        print(SystemInfo.operatingSystemFamily);
+        system.text = SystemInfo.operatingSystem;
+        foreach (string x in Input.GetJoystickNames()) 
+        {
+            system.text += "\n" + x;
+        }
     }
 
     public void Update()
     {
-        if (enVista)
+        axis.text = "";
+        buttons.text = "";
+        for (int i = 0; i < 28; i++)
         {
-            tiempo += Time.deltaTime;
+            axis.text += "\nAxis" + (i + 1) + ":\t";
+            float value = CrossPlatformInputManager.GetAxisRaw("Axis" + (i + 1));
+            value = (float)Math.Round(value * 100f) / 100f;
+            axis.text += value;
         }
-        else
+
+        if (DetectPressedKeyOrButton() != null)
+            input.text = DetectPressedKeyOrButton();
+
+        for (int i = 0; i < 13; i++)
         {
-            tiempo -= Time.deltaTime;
+            buttons.text += "\nButton" + (i + 1) + ":\t";
+            bool value2 = CrossPlatformInputManager.GetButton("Button" + (1 + i));
+            buttons.text += value2;
         }
 
-        tiempo = Mathf.Clamp(tiempo, 0, timepoDeVision + 1);
+    }
 
-        float x = player.position.x - transform.position.x;
-        float y = player.position.z - transform.position.z;
-
-        float angulo = Mathf.Atan(y / x) * Mathf.Rad2Deg;
-
-        if (x < 0 && y < 0)
-            angulo = ((90 - angulo) * -1) + -90;
-        else if (x < 0 && y > 0)
-            angulo = 180  + angulo;
-
-        tiempo += Time.deltaTime;
-
-        float anguloFinal = angulo + transform.eulerAngles.y + 90;
-        if (anguloFinal > 180)
-            anguloFinal-= 360;
-        else if (anguloFinal < -180)
-            anguloFinal += 360;
-
-        if (Mathf.Abs(anguloFinal) < anguloDeVision)
-            enVista = true;
-        else
-            enVista = false;
-
-       // Debug.Log(anguloFinal + "\t" + x + "\t" + y + "\t\t" + tiempo);
-
-        
-        /*
-        Vector3 pos1 = new Vector3(-4, 1, -4);
-        Vector3 pos2 = player.position;
-        float angulo = Vector3.SignedAngle(pos1, pos2, Vector3.forward);
-        float anguloLocal = 360 - transform.eulerAngles.y;
-        if (anguloLocal > 180) anguloLocal -= 360;
-        //Debug.Log(pos1 + " \t " + pos2 + " \t " + angulo + "\t\t" + tiempo);
-
-        if (angulo > 180 - anguloDeVision)
-            enVista = true;
-        else
-            enVista = false;
-        //Debug.Log(Mathf.RoundToInt(angulo * 10) / 10 + "\t" + Mathf.Round(anguloLocal) + "\t" + enVista + "\t\t" + tiempo);
-
-        transform.eulerAngles += new Vector3(0, 0, 1f);*/
+    public string DetectPressedKeyOrButton()
+    {
+        foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
+        {
+            if (Input.GetKeyDown(kcode))
+                return kcode.ToString();
+        }
+        return null;
     }
 }

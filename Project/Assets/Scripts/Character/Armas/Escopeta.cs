@@ -10,7 +10,7 @@ public class Escopeta : Armas
     public int maxAmmo = 2;
     public int numeroDeBalas = 4;
     public float tiempoRecarga = 8f;
-    public float cadenciaDeTiro = 0.5f;
+    public float cadenciaDeTiro = 1f;
     public float precision = 60f;
     public float alcance = 100f;
     public int ammo = 2;

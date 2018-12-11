@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityStandardAssets.CrossPlatformInput;
 public class CameraScript : MonoBehaviour
 {
     //Script utilizado para el movimiento de la camara, esta se ubica entre el jugador y la mira,
@@ -35,7 +35,7 @@ public class CameraScript : MonoBehaviour
 
         transform.position = new Vector3(posX, altura, posZ);
 
-        if (Input.GetButtonDown("R3"))
+        if (CrossPlatformInputManager.GetButtonDown("R3"))
             apuntar = !apuntar;
 
         if (apuntar)

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class MenuScript : MonoBehaviour
 {
@@ -22,6 +23,11 @@ public class MenuScript : MonoBehaviour
     public Button scene;
     public GameObject informacionMejoras;
     public GameObject informacionArmas;
+    public Image botonX;
+    public Sprite seleccionarButton;
+    public Sprite empezarButton;
+    public GameObject main1;
+    public GameObject main2;
 
     [Header("Sprites de armas")]
     public Sprite desarmado;
@@ -103,31 +109,31 @@ public class MenuScript : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("R1"))
+        if (CrossPlatformInputManager.GetButtonDown("R1"))
             CambioArma(1, true);
-        if (Input.GetButtonDown("L1"))
+        if (CrossPlatformInputManager.GetButtonDown("L1"))
             CambioArma(-1, true);
 
-        if (Input.GetButtonDown("Triangle"))
+        if (CrossPlatformInputManager.GetButtonDown("Triangle"))
             CambiodeSlot(1, true);
-        if (Input.GetButtonDown("Circle") && !informacionMejoras.activeSelf)
+        if (CrossPlatformInputManager.GetButtonDown("Circle") && !informacionMejoras.activeSelf)
             CambiodeSlot(-1, true);
 
-        if (Input.GetButtonDown("X") && mainSlot == 2)
+        if (CrossPlatformInputManager.GetButtonDown("Options") && mainSlot == 2)
             StartGame();
 
-        if (Input.GetButtonDown("X") && !informacionMejoras.activeSelf)
+        if (CrossPlatformInputManager.GetButtonDown("X") && !informacionMejoras.activeSelf)
             CambiodeSlot(1, true);
 
-        if (Input.GetButtonDown("Circle") && informacionMejoras.activeSelf)
+        if (CrossPlatformInputManager.GetButtonDown("Circle") && informacionMejoras.activeSelf)
             MostrarMejoras();
 
-        if (Input.GetButtonDown("Square") && mainSlot != 2)
+        if (CrossPlatformInputManager.GetButtonDown("Square") && mainSlot != 2)
             MostrarMejoras();
 
-        if (Input.GetButtonDown("Options") && mainSlot != 2)
+        if (CrossPlatformInputManager.GetButtonDown("Options") && mainSlot != 2)
             CambiodeSlot(1, true);
-        else if (Input.GetButtonDown("Options"))
+        else if (CrossPlatformInputManager.GetButtonDown("Options"))
             StartGame();
     }
 
@@ -165,6 +171,20 @@ public class MenuScript : MonoBehaviour
         CambiodeSlot(x, false);
     }
 
+    public void BotonAceptar()
+    {
+        if (mainSlot == 2)
+            StartGame();
+        else
+            CambiodeSlot(1, true);
+    }
+
+    public void BotonMejoras()
+    {
+        if (mainSlot != 2)
+            MostrarMejoras();
+    }
+
     void CambiodeSlot(int x, bool input)
     {
         Color active = new Color(1, 1, 1, 1);
@@ -184,6 +204,12 @@ public class MenuScript : MonoBehaviour
         {
             CambioArma(5, false);
             mensaje.gameObject.SetActive(false);
+            print(eventSystem.alreadySelecting);
+            if (main1.activeSelf)
+                eventSystem.SetSelectedGameObject(main1);
+            if (main2.activeSelf)
+                eventSystem.SetSelectedGameObject(main2);
+            print(eventSystem.alreadySelecting);
         }
         else if (mainSlot == 1)
         {
@@ -221,7 +247,7 @@ public class MenuScript : MonoBehaviour
                 arma1.color = active;
                 arma2.color = inactive;
                 personaje.color = inactive;
-
+                botonX.sprite = seleccionarButton;
                 break;
             case 1:
                 informacionMejoras.SetActive(false);
@@ -230,6 +256,7 @@ public class MenuScript : MonoBehaviour
                 arma1.color = active;
                 arma2.color = active;
                 personaje.color = inactive;
+                botonX.sprite = seleccionarButton;
                 break;
             case 2:
                 informacionMejoras.SetActive(true);
@@ -238,6 +265,7 @@ public class MenuScript : MonoBehaviour
                 arma1.color = active;
                 arma2.color = active;
                 personaje.color = active;
+                botonX.sprite = empezarButton;
                 break;
         }
     }
@@ -462,7 +490,7 @@ public class MenuScript : MonoBehaviour
 
         if(informacionMejoras.activeSelf)
         {
-            eventSystem.SetSelectedGameObject(GameObject.Find("SubMain"));
+            eventSystem.SetSelectedGameObject(main2);
         }
     }
 
@@ -587,6 +615,7 @@ public class MenuScript : MonoBehaviour
         GuardarInfo();
         GameManager.instance.ps.SaveInfo(mejorasDisp);
         GameManager.instance.gameState = GameState.inGame;
+        GameManager.instance.Reset();
         SceneManager.LoadScene(int.Parse(scene.GetComponentInChildren<Text>().text));
     }
 
@@ -594,7 +623,7 @@ public class MenuScript : MonoBehaviour
     {
         int x = int.Parse(scene.GetComponentInChildren<Text>().text);
         x++;
-        if (x > 3)
+        if (x > SceneManager.sceneCountInBuildSettings)
             x = 1;
         scene.GetComponentInChildren<Text>().text = x.ToString();
     }

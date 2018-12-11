@@ -28,8 +28,8 @@ public class GameManager : MonoBehaviour
     private List<GameObject> enemigos = new List<GameObject>();
     private int id = 0;
     private int musicInt;
-    [HideInInspector]
-    public float radioJoystick = 8;
+    [HideInInspector] public float radioJoystick = 8;
+    [HideInInspector] public bool windows = false;
 
     void Awake()
     {
@@ -48,27 +48,31 @@ public class GameManager : MonoBehaviour
         ps = GetComponent<PlayerScript>();
         //El GameManager no debe ser destruido al cambiar escena.
         DontDestroyOnLoad(gameObject);
+
+        if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.Windows)
+            windows = true;
     }
 
     private void Start()
     {
         Reset();
-        //source.clip = clips[0];
-        //source.Play();
+        source = GetComponent<AudioSource>();
+        source.clip = clips[0];
+        source.Play();
     }
 
     private void Update()
-    { /*
+    { 
         if (!source.isPlaying)
         {
             musicInt++;
 
-            if (musicInt > clips.Length)
+            if (musicInt >= clips.Length)
                 musicInt = 0;
 
             source.clip = clips[musicInt];
             source.Play();
-        } */
+        } 
     }
 
     public void Reset()
